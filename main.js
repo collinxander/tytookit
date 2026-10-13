@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 
-const GALLERY_PATH = "/public/artgallery/untitled.gltf";
+const GALLERY_PATH = "public/artgallery/untitled.gltf";
 
 const progressContainer = document.getElementById("progress-container");
 const progressText = document.getElementById("progress");
