@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Gallery — Ty Took It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2efe7; --bg2:#e9e4d6; --ink:#1c1a15; --dim:#726b5c;
+  --mat:#fbf9f3; --rust:#a4222f; --brass:#b48a3a; --line:rgba(28,26,21,.12);
+  --k:1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;
+  min-height:100%;overflow-x:hidden;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+button,a{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--rust);outline-offset:3px}
+::selection{background:var(--rust);color:var(--bg)}
+.serif{font-family:'Fraunces',serif}
+
+/* ---------- header ---------- */
+header{
+  position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.4rem clamp(1.2rem,4vw,2.5rem);
+  background:rgba(242,239,231,0.85);backdrop-filter:blur(10px) saturate(1.2);
+  border-bottom:1px solid var(--line);
+}
+header .name{font-family:'Fraunces',serif;font-size:1rem;font-style:italic}
+header nav{display:flex;gap:1.6rem;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.03em}
+header nav a{text-decoration:none;color:var(--ink);opacity:.55;padding:.25rem 0;border-bottom:1px solid transparent;transition:opacity .25s,border-color .25s}
+header nav a:hover{opacity:1}
+header nav a.on{opacity:1;border-color:var(--rust)}
+
+/* ---------- wall ---------- */
+#wall{position:relative;padding:9rem 0 5rem;isolation:isolate}
+#wall::before{ /* soft moving light on plaster */
+  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(600px circle at var(--mx,50%) var(--my,35%),rgba(164,34,47,.06),transparent 70%),
+    linear-gradient(var(--bg),var(--bg2) 55%,var(--bg));
+}
+.intro{padding:0 clamp(1.2rem,4vw,2.5rem);max-width:1100px;margin-bottom:2.5rem}
+.intro .eyebrow{
+  display:flex;align-items:center;gap:.6rem;font-size:.7rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--rust);margin-bottom:1.4rem;
+}
+.intro .eyebrow::before{content:'';width:28px;height:1px;background:var(--rust)}
+.intro h1{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:clamp(2.6rem,8vw,6.4rem);line-height:.98;letter-spacing:-.02em;
+}
+.intro h1 em{color:var(--rust);font-style:italic}
+.intro p{color:var(--dim);margin-top:1.4rem;max-width:34ch;line-height:1.6;font-size:.95rem}
+
+.track{overflow:hidden;padding:4.5rem 0 3.2rem}
+.track + .track{padding-top:3rem}
+.strip{display:flex;align-items:flex-start;width:max-content;animation:drift var(--dur,110s) linear infinite;will-change:transform}
+.strip.rev{animation-direction:reverse}
+.track:hover .strip,.track:focus-within .strip{animation-play-state:paused}
+@keyframes drift{to{transform:translateX(-50%)}}
+
+/* ---------- frame ---------- */
+.frame{
+  --h:calc(var(--base,320px)*var(--k));
+  position:relative;flex:0 0 auto;margin-right:clamp(3rem,6vw,6rem);
+  background:none;border:0;cursor:pointer;text-align:left;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.frame:hover,.frame:focus-visible{transform:translateY(-8px)}
+
+/* picture light: brass bar + cone of light on the wall */
+.frame .lamp{position:absolute;left:50%;top:-2.4rem;width:44%;height:.35rem;transform:translateX(-50%);
+  background:linear-gradient(#e2c688,#8f7238);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.6)}
+.frame .lamp::before{content:'';position:absolute;left:50%;top:-.7rem;width:2px;height:.7rem;background:#6d5a2e;transform:translateX(-50%)}
+.frame .lamp::after{
+  content:'';position:absolute;left:50%;top:.35rem;width:170%;height:calc(var(--h) + 3.2rem);
+  transform:translateX(-50%);z-index:-1;pointer-events:none;
+  clip-path:polygon(24% 0,76% 0,100% 100%,0 100%);
+  background:linear-gradient(rgba(255,236,190,.16),rgba(255,236,190,.03) 75%,transparent);
+  opacity:.75;transition:opacity .5s;
+}
+.frame:hover .lamp::after,.frame:focus-visible .lamp::after{opacity:1}
+
+.moulding{
+  position:relative;padding:calc(.9rem*var(--k)) ;border-radius:2px;
+  box-shadow:0 34px 50px -22px rgba(0,0,0,.85),0 6px 14px rgba(0,0,0,.5);
+}
+.moulding::before{ /* inner lip */
+  content:'';position:absolute;inset:calc(.55rem*var(--k));pointer-events:none;
+  border:1px solid rgba(255,255,255,.1);border-right-color:rgba(0,0,0,.3);border-bottom-color:rgba(0,0,0,.3);
+}
+.skin-black .moulding{background:linear-gradient(135deg,#34332f,#141311 45%,#0a0908);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 34px 50px -22px rgba(0,0,0,.85),0 6px 14px rgba(0,0,0,.5)}
+.skin-walnut .moulding{background:repeating-linear-gradient(96deg,rgba(0,0,0,.2) 0 2px,transparent 2px 8px),linear-gradient(135deg,#6a4529,#40281a 50%,#24150b);box-shadow:inset 0 0 0 1px rgba(255,220,180,.1),0 34px 50px -22px rgba(0,0,0,.85),0 6px 14px rgba(0,0,0,.5)}
+.skin-oak .moulding{background:repeating-linear-gradient(92deg,rgba(90,60,25,.16) 0 1px,transparent 1px 7px),linear-gradient(135deg,#d3b487,#b48f5e 55%,#8f6d42);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 34px 50px -22px rgba(0,0,0,.85),0 6px 14px rgba(0,0,0,.5)}
+.skin-gold .moulding{background:linear-gradient(135deg,#e8cf8e,#b48a3a 40%,#7d5d22 70%,#d6b76a);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 34px 50px -22px rgba(0,0,0,.85),0 6px 14px rgba(0,0,0,.5)}
+.skin-gold .moulding::before,.skin-oak .moulding::before{border-color:rgba(0,0,0,.22)}
+
+.mat{background:var(--mat);padding:calc(1.3rem*var(--k));box-shadow:inset 0 2px 6px rgba(0,0,0,.18),inset 0 0 0 1px rgba(0,0,0,.06)}
+.mat img{display:block;height:var(--h);width:auto;max-width:none;box-shadow:0 0 0 1px rgba(0,0,0,.14),0 1px 8px rgba(0,0,0,.15)}
+.mat .ph{height:var(--h);aspect-ratio:4/5;background:#ddd8cb}
+
+/* museum placard */
+.plaque{
+  margin:1.5rem 0 0 .3rem;display:inline-block;padding:.5rem .8rem .55rem;
+  background:var(--mat);color:var(--ink);border-radius:1px;
+  box-shadow:0 8px 14px -6px rgba(28,26,21,.3);
+}
+.plaque b{display:block;font-family:'Fraunces',serif;font-weight:500;font-size:1.15rem;line-height:1.1}
+.plaque span{font-size:.72rem;color:var(--dim)}
+
+/* ---------- collection ---------- */
+#collection{
+  position:fixed;inset:0;z-index:60;overflow-y:auto;background:var(--bg);
+  transform:translateY(100%);visibility:hidden;
+  transition:transform .55s cubic-bezier(.16,.8,.24,1),visibility 0s .55s;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+#collection.open{transform:none;visibility:visible;transition:transform .55s cubic-bezier(.16,.8,.24,1)}
+.col-head{
+  position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;
+  padding:calc(2rem + env(safe-area-inset-top,0px)) clamp(1.2rem,4vw,3rem) 1.4rem;
+  background:linear-gradient(var(--bg) 65%,transparent);
+}
+.col-head h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(2.2rem,7vw,4.4rem);line-height:.98;letter-spacing:-.01em}
+.col-head p{color:var(--dim);font-size:.85rem;margin-top:.5rem}
+.col-close{border:1px solid var(--line);background:transparent;color:var(--ink);padding:.55rem 1.1rem;border-radius:999px;cursor:pointer;font-size:.82rem;font-weight:600;transition:border-color .2s,background .2s;flex:0 0 auto}
+.col-close:hover{border-color:var(--ink);background:rgba(28,26,21,.06)}
+.col-grid{
+  display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(1.4rem,3vw,2.6rem);
+  padding:1rem clamp(1.2rem,4vw,3rem) 6rem;max-width:1400px;margin:0 auto;
+}
+.item{background:none;border:0;cursor:zoom-in;padding:0}
+.item .moulding{padding:.6rem}
+.item .mat{padding:.7rem}
+.item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease}
+.item .win{overflow:hidden;width:100%;height:100%}
+.item:hover img{transform:scale(1.04)}
+.item .mat{height:100%}
+.item .moulding{height:100%}
+.item.a{grid-column:2/9;aspect-ratio:4/5}
+.item.b{grid-column:9/13;aspect-ratio:3/4;margin-top:3rem}
+.item.c{grid-column:1/6;aspect-ratio:1/1}
+.item.d{grid-column:6/13;aspect-ratio:16/10}
+.item.e{grid-column:3/11;aspect-ratio:16/9}
+
+/* ---------- lightbox ---------- */
+#lightbox{position:fixed;inset:0;z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,13,10,.94);padding:1rem}
+#lightbox.open{display:flex}
+#lbStage{max-width:92vw;max-height:78vh;display:flex}
+#lbStage img{max-width:100%;max-height:78vh;object-fit:contain;display:block}
+#lbStage .moulding{padding:.8rem}
+#lbStage .mat{padding:1.1rem}
+#lbStage .mat img{height:auto;max-height:calc(78vh - 6rem);max-width:calc(92vw - 6rem)}
+#lbCap{margin-top:1.4rem;color:var(--bg2);font-size:.85rem}
+.lb-btn{position:absolute;background:none;border:0;cursor:pointer;color:var(--mat);opacity:.75;transition:opacity .2s;padding:1rem;font-size:1.8rem;line-height:1}
+.lb-btn:hover{opacity:1}
+#lbClose{top:calc(.8rem + env(safe-area-inset-top,0px));right:.8rem;font-size:1.3rem}
+#lbPrev{left:.3rem;top:50%;transform:translateY(-50%)}
+#lbNext{right:.3rem;top:50%;transform:translateY(-50%)}
+
+@media(max-width:720px){
+  :root{--k:.62}
+  header nav{gap:1rem;font-size:.82rem}
+  .col-grid{grid-template-columns:repeat(6,1fr)}
+  .item.a,.item.d,.item.e{grid-column:1/7}
+  .item.b{grid-column:1/7;margin-top:0}
+  .item.c{grid-column:1/5}
+  .lamp::after{opacity:.5}
+}
+@media(prefers-reduced-motion:reduce){
+  .strip{animation:none}
+  .track{overflow-x:auto}
+  *{transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="name serif">Ty To.ook It</span>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="gallery.html" class="on" aria-current="page">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Bookings</a>
+  </nav>
+</header>
+
+<main id="wall">
+  <div class="intro">
+    <div class="eyebrow">Index — 003 / Gallery</div>
+    <h1 class="serif">The <em>Gallery</em></h1>
+    <p>The frames drift past on their own. Hover to hold one still, click to walk into the collection.</p>
+  </div>
+  <div class="track"><div class="strip" id="row1" style="--dur:120s"></div></div>
+  <div class="track"><div class="strip rev" id="row2" style="--dur:150s"></div></div>
+</main>
+
+<section id="collection" aria-label="Collection" aria-hidden="true">
+  <div class="col-head">
+    <div>
+      <h2 id="colTitle"></h2>
+      <p id="colYear"></p>
+    </div>
+    <button class="col-close" id="colClose">Close</button>
+  </div>
+  <div class="col-grid" id="colGrid"></div>
+</section>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-btn" id="lbClose" aria-label="Close viewer">✕</button>
+  <button class="lb-btn" id="lbPrev" aria-label="Previous image">‹</button>
+  <button class="lb-btn" id="lbNext" aria-label="Next image">›</button>
+  <div id="lbStage"></div>
+  <p id="lbCap"></p>
+</div>
+
+<script>
+const encode = p => p.split('/').map(encodeURIComponent).join('/');
+
+// ---- Content: collection -> real photography ----
+const chapters = {
+  home:          { title:'Home', year:'2025, origin', images:['home.jpg'].map(f=>`Images/Home/${f}`) },
+  vessel:        { title:'Vessel', year:'2025, the body as archive', images:['VESSEL1.JPG','VESSEL2.jpeg','VESSEL3.jpg','VESSEL4.jpeg','VESSEL5.jpg','VESSEL6.JPG','VESSEL7.jpeg'].map(f=>`Images/vessel/${f}`) },
+  gradification: { title:'Gradification', year:'2026, colour studies', images:['gradification1.jpeg','gradification2.jpeg','gradification3.jpeg','gradification4.jpeg','gradification5.jpeg','gradification6.JPG','gradification7.jpg','gradification8.jpeg','gradification9.jpeg','gradification10.jpeg','gradification11.jpeg','gradification12.jpeg','gradification13.jpeg'].map(f=>`Images/gradification/${f}`) },
+  union:         { title:'Union', year:'2025, proximity', images:['Union1.jpeg','union2.jpg','union3.jpg','union4.jpg'].map(f=>`Images/union/${f}`) },
+  roots:         { title:'Roots & Kulture', year:'2025, inheritance', images:['R&K1.JPG','R&K2.JPG','R&K3.JPG','R&K4.JPG','R&K5.jpeg','R&K6.jpeg','R&K7.JPG','R&K8.JPG','IMG_3646.jpg'].map(f=>`Images/roots & kulture/${f}`) },
+  features:      { title:'Features & Exhibits', year:'2024–25, exhibitions', images:['3rd show MONAD Houston (6).jpeg','3rd show MONAD Houston (9).jpeg','4th show LAAMS NYC (2).jpeg','4th show LAAMS NYC.jpeg','F&E1.jpeg','F&E2.jpeg','F&E3.jpg','F&E4.jpeg','F&E5.jpeg','F&E6.jpeg','F&E7.jpeg','F&E8.jpeg','F&E9.jpeg','F&E10.jpeg','F&E11.jpeg'].map(f=>`Images/features & exhibits/${f}`) }
+};
+const row1 = ['home','vessel','gradification','union','roots','features'];
+const row2 = ['features','roots','union','gradification','vessel','home'];
+const shapes = ['a','b','c','d','e'];
+const skins  = ['skin-black','skin-walnut','skin-gold','skin-oak'];
+const bases  = [340,290,380,310,360,300];   // frame heights vary, widths follow each photo
+
+const img = (src, extra='') => `<img src="${encode(src)}" alt="" ${extra} onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph'}))">`;
+
+function buildFrame(key, i, offset){
+  const c = chapters[key];
+  const b = document.createElement('button');
+  b.className = `frame ${skins[(i+offset) % skins.length]}`;
+  b.style.setProperty('--base', bases[(i+offset) % bases.length] + 'px');
+  b.setAttribute('aria-label', `Open ${c.title}`);
+  b.innerHTML = `<span class="lamp"></span>
+    <div class="moulding"><div class="mat">${img(c.images[0], 'decoding="async"')}</div></div>
+    <div class="plaque"><b>${c.title}</b><span>${c.year}</span></div>`;
+  b.addEventListener('click', () => openCollection(key));
+  return b;
+}
+function fill(el, keys, offset){
+  // two identical halves so translateX(-50%) loops seamlessly
+  [0,1].forEach(() => keys.forEach((k,i) => el.appendChild(buildFrame(k,i,offset))));
+}
+fill(document.getElementById('row1'), row1, 0);
+fill(document.getElementById('row2'), row2, 2);
+
+// warm light follows the pointer across the wall
+const wall = document.getElementById('wall');
+wall.addEventListener('pointermove', e => {
+  const r = wall.getBoundingClientRect();
+  wall.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  wall.style.setProperty('--my', (e.clientY - r.top) + 'px');
+});
+
+// ---- Collection ----
+const collection = document.getElementById('collection');
+const colGrid = document.getElementById('colGrid');
+let currentKey = null, currentImages = [], lastFocus = null;
+
+function openCollection(key){
+  lastFocus = document.activeElement;
+  currentKey = key;
+  const c = chapters[key];
+  document.getElementById('colTitle').textContent = c.title;
+  document.getElementById('colYear').textContent = `${c.year}, ${c.images.length} ${c.images.length === 1 ? 'image' : 'images'}`;
+  colGrid.innerHTML = '';
+  currentImages = c.images;
+  c.images.forEach((src,i) => {
+    const it = document.createElement('button');
+    it.className = `item ${shapes[i % shapes.length]} ${skins[i % skins.length]}`;
+    it.setAttribute('aria-label', `View image ${i+1} of ${c.images.length}`);
+    it.innerHTML = `<div class="moulding"><div class="mat"><div class="win">${img(src)}</div></div></div>`;
+    it.addEventListener('click', () => openLightbox(i));
+    colGrid.appendChild(it);
+  });
+  collection.scrollTop = 0;
+  collection.classList.add('open');
+  collection.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('colClose').focus();
+}
+function closeCollection(){
+  collection.classList.remove('open');
+  collection.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+  if (lastFocus) lastFocus.focus();
+}
+document.getElementById('colClose').addEventListener('click', closeCollection);
+
+// ---- Lightbox ----
+const lb = document.getElementById('lightbox');
+const lbStage = document.getElementById('lbStage');
+let lbIndex = 0;
+
+function renderLb(){
+  const c = chapters[currentKey];
+  lbStage.innerHTML = `<div class="moulding ${skins[lbIndex % skins.length]}"><div class="mat">${img(currentImages[lbIndex])}</div></div>`;
+  document.getElementById('lbCap').textContent = `${c.title}, image ${lbIndex+1} of ${currentImages.length}`;
+}
+function step(d){ lbIndex = (lbIndex + d + currentImages.length) % currentImages.length; renderLb(); }
+function openLightbox(i){ lbIndex = i; renderLb(); lb.classList.add('open'); document.getElementById('lbClose').focus(); }
+function closeLb(){ lb.classList.remove('open'); }
+
+document.getElementById('lbClose').addEventListener('click', closeLb);
+document.getElementById('lbPrev').addEventListener('click', () => step(-1));
+document.getElementById('lbNext').addEventListener('click', () => step(1));
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+
+let tx = null;
+lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+lb.addEventListener('touchend', e => {
+  if (tx === null) return;
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+  tx = null;
+});
+
+window.addEventListener('keydown', e => {
+  if (lb.classList.contains('open')){
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  } else if (collection.classList.contains('open') && e.key === 'Escape'){
+    closeCollection();
+  }
+});
+</script>
+</body>
+</html>

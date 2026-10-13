@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>About — Ty To.ook It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2efe7; --bg2:#e9e4d6; --ink:#1c1a15; --dim:#726b5c;
+  --mat:#fbf9f3; --rust:#a4222f; --line:rgba(28,26,21,0.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;overflow-x:hidden}
+::selection{background:var(--rust);color:var(--bg)}
+a,button{font-family:inherit;color:inherit}
+img{display:block;width:100%;height:100%;object-fit:cover}
+.serif{font-family:'Fraunces',serif}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.is-visible{opacity:1;transform:translateY(0)}
+
+/* Nav — matches gallery.html / contact.html */
+header{
+  position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.4rem clamp(1.2rem,4vw,2.5rem);
+  background:rgba(242,239,231,0.85);backdrop-filter:blur(10px) saturate(1.2);
+  border-bottom:1px solid var(--line);
+}
+header .name{font-family:'Fraunces',serif;font-size:1rem;font-style:italic}
+header nav{display:flex;gap:1.6rem;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:.03em}
+header nav a{opacity:.55;cursor:pointer;transition:opacity .3s;text-decoration:none}
+header nav a:hover,header nav a.on{opacity:1}
+
+main{padding-top:5.6rem}
+
+/* ---- Hero ---- */
+.about-hero{
+  position:relative;display:grid;grid-template-columns:1.05fr .95fr;
+  min-height:88vh;background:var(--bg);overflow:hidden;
+}
+.hero-copy{
+  position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;
+  padding:3.5rem clamp(1.2rem,4vw,3.5rem);
+}
+.hero-eyebrow{
+  display:flex;align-items:center;gap:.6rem;font-size:.7rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--rust);margin-bottom:1.6rem;
+}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--rust)}
+.hero-copy h1{
+  font-family:'Fraunces',serif;font-weight:300;font-size:clamp(2.4rem,6vw,4.4rem);
+  line-height:1.05;letter-spacing:-0.01em;margin-bottom:1.6rem;
+}
+.hero-copy h1 em{color:var(--rust);font-style:italic}
+.hero-copy p{color:var(--dim);font-size:1rem;line-height:1.7;max-width:44ch;margin-bottom:2.2rem}
+.hero-scroll{display:inline-flex;align-items:center;gap:.8rem;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.hero-scroll .scroll-line{width:1px;height:34px;background:var(--line);position:relative;overflow:hidden}
+.hero-scroll .scroll-line::after{
+  content:'';position:absolute;top:-100%;left:0;right:0;height:100%;background:var(--rust);
+  animation:scroll-drip 1.8s ease-in-out infinite;
+}
+@keyframes scroll-drip{0%{top:-100%}60%{top:100%}100%{top:100%}}
+
+.hero-media{position:relative;overflow:hidden;background:var(--ink)}
+.hero-media img{height:100%;transform:scale(1.02);filter:saturate(.94) contrast(1.03);transition:transform 8s ease}
+.about-hero:hover .hero-media img{transform:scale(1.1)}
+.hero-media::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,transparent 8%);z-index:1}
+.hero-frame-num,.hero-index-mark{
+  position:absolute;z-index:2;color:var(--mat);font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+}
+.hero-frame-num{bottom:1.4rem;right:1.4rem;display:flex;align-items:center;gap:.6rem}
+.hero-frame-num::before{content:'';width:22px;height:1px;background:rgba(251,249,243,.6)}
+.hero-index-mark{top:1.4rem;left:1.4rem;background:rgba(28,26,21,.4);padding:.4rem .8rem;border-radius:20px;backdrop-filter:blur(4px)}
+
+/* ---- Lead / portrait ---- */
+.lead{
+  padding:6rem clamp(1.2rem,4vw,2.5rem);display:grid;grid-template-columns:.9fr 1.1fr;
+  gap:3.5rem;align-items:center;max-width:1200px;margin:0 auto;
+}
+.lead-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--ink);border-radius:10px}
+.lead-media img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.lead-media:hover img{transform:scale(1.05)}
+.lead-media::after{content:'';position:absolute;inset:0;border:1px solid rgba(251,249,243,.16);border-radius:10px;pointer-events:none}
+.lead-tag{
+  position:absolute;bottom:1rem;left:1rem;color:var(--mat);font-size:.65rem;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;background:rgba(28,26,21,.55);padding:.4rem .8rem;border-radius:20px;backdrop-filter:blur(4px);
+}
+.info-label{
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rust);
+  margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;
+}
+.info-label::before{content:'';width:32px;height:1px;background:var(--rust)}
+.lead-copy h2{
+  font-family:'Fraunces',serif;font-weight:300;font-size:clamp(1.9rem,4vw,2.8rem);
+  line-height:1.1;letter-spacing:-0.01em;margin-bottom:1.4rem;
+}
+.lead-copy h2 em{color:var(--rust);font-style:italic}
+.lead-copy p{font-size:.92rem;line-height:1.75;color:var(--dim);margin-bottom:1.1rem;max-width:56ch}
+
+/* ---- Pillars ---- */
+.pillars{
+  padding:1rem clamp(1.2rem,4vw,2.5rem) 6rem;max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.pillar{background:var(--mat);padding:2.4rem 2.1rem;transition:background .25s ease}
+.pillar:hover{background:var(--bg2)}
+.pillar-num{font-size:.7rem;color:var(--dim);margin-bottom:1.4rem;font-weight:600;letter-spacing:.05em}
+.pillar h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.1rem;margin-bottom:.7rem}
+.pillar p{font-size:.85rem;line-height:1.6;color:var(--dim)}
+
+/* ---- Story band ---- */
+.story-band{background:var(--ink);color:var(--mat);padding:6rem clamp(1.2rem,4vw,2.5rem)}
+.story-inner{max-width:820px;margin:0 auto;text-align:center}
+.story-inner .info-label{
+  color:var(--rust);justify-content:center;display:flex;align-items:center;gap:.6rem;margin-bottom:1.4rem;
+}
+.story-inner .info-label::before,.story-inner .info-label::after{content:'';width:28px;height:1px;background:var(--rust)}
+.story-inner p.big{
+  font-family:'Fraunces',serif;font-weight:300;font-size:clamp(1.3rem,3vw,2rem);line-height:1.45;letter-spacing:-0.01em;
+}
+.story-inner p.big em{color:#e6a892;font-style:italic}
+
+/* ---- Gallery grid ---- */
+.about-gallery{padding:6rem clamp(1.2rem,4vw,2.5rem);max-width:1200px;margin:0 auto}
+.gallery-head{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;margin-bottom:2.6rem;flex-wrap:wrap}
+.gallery-head h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(1.7rem,3.4vw,2.4rem);line-height:1.1;max-width:16ch}
+.gallery-head p{font-size:.88rem;color:var(--dim);max-width:40ch;line-height:1.6}
+
+.gallery-grid{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:130px;gap:.85rem}
+.g-item{position:relative;overflow:hidden;background:var(--ink);cursor:pointer;border-radius:8px}
+.g-item img{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.g-item:hover img{transform:scale(1.08)}
+.g-item::before{
+  content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(28,26,21,.55) 100%);
+  opacity:0;transition:opacity .3s ease;z-index:1;
+}
+.g-item:hover::before{opacity:1}
+.g-item span{
+  position:absolute;bottom:.7rem;left:.8rem;z-index:2;color:var(--mat);font-size:.68rem;font-weight:600;letter-spacing:.04em;
+  opacity:0;transform:translateY(6px);transition:opacity .3s ease, transform .3s ease;
+}
+.g-item:hover span{opacity:1;transform:translateY(0)}
+.g-1{grid-column:span 3;grid-row:span 3}
+.g-2{grid-column:span 3;grid-row:span 2}
+.g-3{grid-column:span 2;grid-row:span 2}
+.g-4{grid-column:span 2;grid-row:span 3}
+.g-5{grid-column:span 2;grid-row:span 2}
+.g-6{grid-column:span 3;grid-row:span 2}
+
+/* ---- Stats strip ---- */
+.stats-strip{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:3rem clamp(1.2rem,4vw,2.5rem);display:flex;justify-content:center;gap:4.5rem;
+  flex-wrap:wrap;text-align:center;
+}
+.stat-item strong{display:block;font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.7rem,3vw,2.4rem);color:var(--rust)}
+.stat-item span{font-size:.68rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+
+/* ---- CTA ---- */
+.about-cta{padding:6.5rem clamp(1.2rem,4vw,2.5rem);text-align:center}
+.about-cta h2{
+  font-family:'Fraunces',serif;font-weight:300;font-size:clamp(1.9rem,5vw,3.2rem);
+  line-height:1.08;margin-bottom:1.8rem;
+}
+.about-cta h2 em{color:var(--rust);font-style:italic}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:1rem;background:var(--ink);color:var(--bg);
+  padding:.6rem .6rem .6rem 1.6rem;border-radius:999px;font-size:.75rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;transition:background .25s ease, padding .25s ease;text-decoration:none;
+}
+.cta-btn .btn-circle{
+  display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;
+  background:var(--rust);color:#fff;transition:transform .25s ease, background .25s ease;
+}
+.cta-btn:hover{background:var(--rust);padding-right:.8rem}
+.cta-btn:hover .btn-circle{transform:rotate(45deg) scale(1.06);background:var(--ink)}
+
+/* ---- Footer ---- */
+footer{
+  border-top:1px solid var(--line);padding:1.4rem clamp(1.2rem,4vw,2.5rem) 2rem;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem;
+  font-size:.72rem;color:var(--dim);
+}
+footer a{color:inherit;text-decoration:none}
+
+@media (max-width:900px){
+  .about-hero{grid-template-columns:1fr;min-height:auto}
+  .hero-copy{padding:6.5rem 1.2rem 2.5rem;order:2}
+  .hero-media{order:1;height:56vh}
+  .lead{grid-template-columns:1fr;padding:4rem 1.2rem;gap:2.4rem}
+  .pillars{grid-template-columns:1fr;padding:0 1.2rem 3.5rem}
+  .story-band{padding:4rem 1.2rem}
+  .about-gallery{padding:4rem 1.2rem}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}
+  .g-1,.g-2,.g-3,.g-4,.g-5,.g-6{grid-column:span 1;grid-row:span 2}
+  .stats-strip{gap:2.4rem;padding:2.4rem 1.2rem}
+  .about-cta{padding:4rem 1.2rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="name serif">Ty To.ook It</span>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html" class="on">About</a>
+    <a href="contact.html">Bookings</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <section class="about-hero">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">Index — 002 / About</div>
+      <h1 class="serif">The People<br />Behind <em>It</em></h1>
+      <p>Ty To.ook It is an independent creative studio working across art direction, editorial photography, and brand consulting — built on the belief that every image should feel considered, not accidental.</p>
+      <div class="hero-scroll">
+        <span class="scroll-line"></span>
+        <span>Scroll to read</span>
+      </div>
+    </div>
+    <div class="hero-media">
+      <span class="hero-index-mark">Ty To.ook It</span>
+      <img src="Images/About/IMG_9127.jpeg" alt="Ty To.ook It studio" />
+      <span class="hero-frame-num">Studio — Frame 01</span>
+    </div>
+  </section>
+
+  <!-- Lead / portrait -->
+  <section class="lead reveal">
+    <div class="lead-media">
+      <img src="Images/About/IMG_3589.jpeg" alt="Ty To.ook It studio portrait" />
+      <span class="lead-tag">Studio — 01</span>
+    </div>
+    <div class="lead-copy">
+      <div class="info-label">Who We Are</div>
+      <h2 class="serif">Part studio,<br />part <em>archive</em>.</h2>
+      <p>Ty To.ook It began as a personal photography practice and grew into a full creative studio — one that treats every shoot, exhibit, and brand collaboration as a chapter in a much larger story. The name is a play on looking closer, taking it all in, and making something worth keeping.</p>
+      <p>We work at the intersection of fashion, culture, and fine art: directing shoots, building visual identities, and consulting with brands who want their imagery to feel like it belongs in a gallery, not just a feed. Every project on this site — Vessel, Gradification, Union, Roots &amp; Kulture, Features &amp; Exhibits — represents a different question we were trying to answer through the camera.</p>
+      <p>What ties it all together is a refusal to settle for the obvious frame. We slow down, study the light, and only press the shutter when it means something.</p>
+    </div>
+  </section>
+
+  <!-- Pillars -->
+  <section class="pillars reveal">
+    <div class="pillar">
+      <div class="pillar-num">01</div>
+      <h3 class="serif">Art Direction</h3>
+      <p>From concept to final frame — moodboards, casting, styling, and on-set direction that keep every shoot cohesive and intentional.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">02</div>
+      <h3 class="serif">Editorial Photography</h3>
+      <p>Long-form visual stories built around a single idea, shot with the patience of a documentary and the precision of a magazine spread.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">03</div>
+      <h3 class="serif">Creative Consulting</h3>
+      <p>Helping brands and individuals define a visual language — and the discipline to actually stick to it across every touchpoint.</p>
+    </div>
+  </section>
+
+  <!-- Story band -->
+  <section class="story-band reveal">
+    <div class="story-inner">
+      <div class="info-label">Our Approach</div>
+      <p class="big serif">We don't chase trends — we chase <em>truth</em>. Every frame we shoot is meant to outlast the moment it was taken in, the same way a good archive outlasts the person who built it.</p>
+    </div>
+  </section>
+
+  
+<footer>
+  <span>Ty To.ook It — Studio</span>
+  <a href="#top">Back to top ↑</a>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach((el) => io.observe(el));
+</script>
+
+</body>
+</html>
