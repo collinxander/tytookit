@@ -8056,9 +8056,9 @@
 			"uri":"Textures/WALL5.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"WALL5",
-			"uri":"Textures/WALL5.png"
+			"uri":"Textures/WALL5_b.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
@@ -8066,9 +8066,9 @@
 			"uri":"Textures/WALL3.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"WALL3",
-			"uri":"Textures/WALL3.png"
+			"uri":"Textures/WALL3_b.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
@@ -8076,9 +8076,9 @@
 			"uri":"Textures/WALL1.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"WALL1",
-			"uri":"Textures/WALL1.png"
+			"uri":"Textures/WALL1_b.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
@@ -8086,54 +8086,54 @@
 			"uri":"Textures/Picture_Frame_baseColor.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"VR_Gallery_baseColor",
-			"uri":"Textures/VR_Gallery_baseColor.png"
+			"uri":"Textures/VR_Gallery_baseColor.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"IMG_3661",
-			"uri":"Textures/IMG_3661.png"
+			"uri":"Textures/IMG_3661.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"IMG_0941",
-			"uri":"Textures/IMG_0941.png"
+			"uri":"Textures/IMG_0941.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"gradification4",
-			"uri":"Textures/gradification4.png"
+			"uri":"Textures/gradification4.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"gradification1",
-			"uri":"Textures/gradification1.png"
+			"uri":"Textures/gradification1.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"IMG_2832",
-			"uri":"Textures/IMG_2832.png"
+			"uri":"Textures/IMG_2832.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"IMG_1500",
-			"uri":"Textures/IMG_1500.png"
+			"uri":"Textures/IMG_1500.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"home",
-			"uri":"Textures/home.png"
+			"uri":"Textures/home.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"IMG_5284",
-			"uri":"Textures/IMG_5284.png"
+			"uri":"Textures/IMG_5284.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"union2",
-			"uri":"Textures/union2.png"
+			"uri":"Textures/union2.jpg"
 		}
 	],
 	"accessors":[
