@@ -1,4 +1,4 @@
-// TY TO.OOK IT — 3D Art Gallery scene
+// TY TO.OK IT — 3D Art Gallery scene
 // Loads the model + textures from /public/artgallery and drives the
 // loading UI (#progress-container / #progress-bar) already present in index.html.
 //

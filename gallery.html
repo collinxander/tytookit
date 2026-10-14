@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Gallery — Ty Took It</title>
+<title>Gallery — Ty To.ok It</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -60,12 +60,36 @@ header nav a.on{opacity:1;border-color:var(--rust)}
 .intro h1 em{color:var(--rust);font-style:italic}
 .intro p{color:var(--dim);margin-top:1.4rem;max-width:34ch;line-height:1.6;font-size:.95rem}
 
-.track{overflow:hidden;padding:4.5rem 0 3.2rem}
+.track{
+  position:relative;overflow-x:auto;overflow-y:hidden;padding:4.5rem 0 3.2rem;
+  scrollbar-width:none;-ms-overflow-style:none;cursor:grab;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+}
+.track::-webkit-scrollbar{display:none}
+.track.dragging{cursor:grabbing;scroll-snap-type:none}
 .track + .track{padding-top:3rem}
-.strip{display:flex;align-items:flex-start;width:max-content;animation:drift var(--dur,110s) linear infinite;will-change:transform}
-.strip.rev{animation-direction:reverse}
-.track:hover .strip,.track:focus-within .strip{animation-play-state:paused}
+.strip{display:flex;align-items:flex-start;width:max-content;will-change:transform}
 @keyframes drift{to{transform:translateX(-50%)}}
+
+/* subtle edge fades so the scrollable wall reads as "more this way" */
+.track::before,.track::after{
+  content:'';position:absolute;top:0;bottom:0;width:clamp(2rem,6vw,5rem);z-index:2;pointer-events:none;
+}
+.track::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.track::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+
+/* nudge arrows */
+.track-nav{
+  display:flex;gap:.6rem;align-items:center;padding:0 clamp(1.2rem,4vw,2.5rem);margin-bottom:.4rem;
+}
+.track-arrow{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--mat);
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:border-color .2s ease,background .2s ease,transform .2s ease;flex:0 0 auto;
+}
+.track-arrow:hover{border-color:var(--rust);color:var(--rust);transform:translateY(-1px)}
+.track-arrow:active{transform:translateY(0) scale(.94)}
+.track-hint{font-size:.72rem;color:var(--dim);letter-spacing:.03em}
 
 /* ---------- frame ---------- */
 .frame{
@@ -176,7 +200,6 @@ header nav a.on{opacity:1;border-color:var(--rust)}
   .lamp::after{opacity:.5}
 }
 @media(prefers-reduced-motion:reduce){
-  .strip{animation:none}
   .track{overflow-x:auto}
   *{transition-duration:.001ms!important}
 }
@@ -185,7 +208,7 @@ header nav a.on{opacity:1;border-color:var(--rust)}
 <body>
 
 <header>
-  <span class="name serif">Ty To.ook It</span>
+  <span class="name serif">Ty To.ok It</span>
   <nav>
     <a href="index.html">Home</a>
     <a href="gallery.html" class="on" aria-current="page">Gallery</a>
@@ -198,10 +221,15 @@ header nav a.on{opacity:1;border-color:var(--rust)}
   <div class="intro">
     <div class="eyebrow">Index — 003 / Gallery</div>
     <h1 class="serif">The <em>Gallery</em></h1>
-    <p>The frames drift past on their own. Hover to hold one still, click to walk into the collection.</p>
+    <p>The frames drift past on their own — or scroll, drag, and swipe to browse at your own pace. Click any frame to walk into the collection.</p>
   </div>
-  <div class="track"><div class="strip" id="row1" style="--dur:120s"></div></div>
-  <div class="track"><div class="strip rev" id="row2" style="--dur:150s"></div></div>
+  <div class="track-nav">
+    <button class="track-arrow" type="button" data-scroll-dir="-1" aria-label="Scroll gallery left">‹</button>
+    <button class="track-arrow" type="button" data-scroll-dir="1" aria-label="Scroll gallery right">›</button>
+    <span class="track-hint">Drag, scroll, or use the arrows</span>
+  </div>
+  <div class="track" id="track1"><div class="strip" id="row1" style="--dur:120s"></div></div>
+  <div class="track" id="track2"><div class="strip rev" id="row2" style="--dur:150s"></div></div>
 </main>
 
 <section id="collection" aria-label="Collection" aria-hidden="true">
@@ -261,6 +289,116 @@ function fill(el, keys, offset){
 }
 fill(document.getElementById('row1'), row1, 0);
 fill(document.getElementById('row2'), row2, 2);
+
+// ---- Manual scroll for the floating frame rows: drag, wheel, swipe, or
+// the arrow buttons — on top of the gentle automatic drift. ----
+function enableTrackScroll(track, { reverse = false, speed = 34 } = {}){
+  let autoplay = true;
+  let resumeTimer = null;
+  let isDown = false, dragged = false, startX = 0, startScroll = 0;
+  const dir = reverse ? -1 : 1;
+
+  // content is duplicated twice (see fill()), so half the scrollWidth is
+  // exactly one full loop — wrap seamlessly when we cross either edge.
+  function wrap(){
+    const half = track.scrollWidth / 2;
+    if (half <= 0) return;
+    if (track.scrollLeft >= half) track.scrollLeft -= half;
+    else if (track.scrollLeft <= 0) track.scrollLeft += half;
+  }
+
+  // start partway through the first loop so both directions have room to
+  // scroll immediately, whichever way the user drags first
+  requestAnimationFrame(() => {
+    track.scrollLeft = reverse ? track.scrollWidth * 0.7 : track.scrollWidth * 0.2;
+  });
+
+  function pauseAutoplay(){
+    autoplay = false;
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => { autoplay = true; }, 2600);
+  }
+
+  function step(dt){
+    if (autoplay && !isDown){
+      track.scrollLeft += dir * speed * dt;
+      wrap();
+    }
+  }
+
+  track.addEventListener('pointerdown', e => {
+    isDown = true; dragged = false;
+    startX = e.clientX; startScroll = track.scrollLeft;
+    track.classList.add('dragging');
+    pauseAutoplay();
+    track.setPointerCapture?.(e.pointerId);
+  });
+  track.addEventListener('pointermove', e => {
+    if (!isDown) return;
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 4) dragged = true;
+    track.scrollLeft = startScroll - dx;
+  });
+  function endDrag(){
+    if (!isDown) return;
+    isDown = false;
+    track.classList.remove('dragging');
+    wrap();
+  }
+  track.addEventListener('pointerup', endDrag);
+  track.addEventListener('pointerleave', endDrag);
+  track.addEventListener('pointercancel', endDrag);
+
+  // swallow the click that would otherwise fire on the frame button
+  // right after a drag, so dragging never accidentally opens a collection
+  track.addEventListener('click', e => {
+    if (dragged){ e.stopPropagation(); e.preventDefault(); dragged = false; }
+  }, true);
+
+  // mouse wheel / trackpad — convert vertical wheel into horizontal scroll,
+  // and pause the automatic drift while the user is actively scrolling
+  track.addEventListener('wheel', e => {
+    pauseAutoplay();
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+      track.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  }, { passive:false });
+  track.addEventListener('scroll', wrap);
+  track.addEventListener('focusin', pauseAutoplay);
+
+  return {
+    step,
+    scrollBy(mult){
+      pauseAutoplay();
+      track.scrollBy({ left: mult * track.clientWidth * 0.8, behavior:'smooth' });
+    }
+  };
+}
+
+const track1El = document.getElementById('track1');
+const track2El = document.getElementById('track2');
+const trackCtrl1 = enableTrackScroll(track1El, { reverse:false, speed:34 });
+const trackCtrl2 = enableTrackScroll(track2El, { reverse:true,  speed:28 });
+
+let lastFrameTime = null;
+function trackTick(ts){
+  if (lastFrameTime == null) lastFrameTime = ts;
+  const dt = Math.min((ts - lastFrameTime) / 1000, 0.1);
+  lastFrameTime = ts;
+  trackCtrl1.step(dt);
+  trackCtrl2.step(dt);
+  requestAnimationFrame(trackTick);
+}
+requestAnimationFrame(trackTick);
+
+document.querySelectorAll('[data-scroll-dir]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mult = parseFloat(btn.getAttribute('data-scroll-dir'));
+    trackCtrl1.scrollBy(mult);
+    trackCtrl2.scrollBy(mult);
+  });
+});
 
 // warm light follows the pointer across the wall
 const wall = document.getElementById('wall');
