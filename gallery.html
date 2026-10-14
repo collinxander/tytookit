@@ -229,7 +229,6 @@ header nav a.on{opacity:1;border-color:var(--rust)}
     <span class="track-hint">Drag, scroll, or use the arrows</span>
   </div>
   <div class="track" id="track1"><div class="strip" id="row1" style="--dur:120s"></div></div>
-  <div class="track" id="track2"><div class="strip rev" id="row2" style="--dur:150s"></div></div>
 </main>
 
 <section id="collection" aria-label="Collection" aria-hidden="true">
@@ -264,7 +263,6 @@ const chapters = {
   features:      { title:'Features & Exhibits', year:'2024–25, exhibitions', images:['3rd show MONAD Houston (6).jpeg','3rd show MONAD Houston (9).jpeg','4th show LAAMS NYC (2).jpeg','4th show LAAMS NYC.jpeg','F&E1.jpeg','F&E2.jpeg','F&E3.jpg','F&E4.jpeg','F&E5.jpeg','F&E6.jpeg','F&E7.jpeg','F&E8.jpeg','F&E9.jpeg','F&E10.jpeg','F&E11.jpeg'].map(f=>`Images/features & exhibits/${f}`) }
 };
 const row1 = ['home','vessel','gradification','union','roots','features'];
-const row2 = ['features','roots','union','gradification','vessel','home'];
 const shapes = ['a','b','c','d','e'];
 const skins  = ['skin-black','skin-walnut','skin-gold','skin-oak'];
 const bases  = [340,290,380,310,360,300];   // frame heights vary, widths follow each photo
@@ -288,7 +286,6 @@ function fill(el, keys, offset){
   [0,1].forEach(() => keys.forEach((k,i) => el.appendChild(buildFrame(k,i,offset))));
 }
 fill(document.getElementById('row1'), row1, 0);
-fill(document.getElementById('row2'), row2, 2);
 
 // ---- Manual scroll for the floating frame rows: drag, wheel, swipe, or
 // the arrow buttons — on top of the gentle automatic drift. ----
@@ -377,9 +374,7 @@ function enableTrackScroll(track, { reverse = false, speed = 34 } = {}){
 }
 
 const track1El = document.getElementById('track1');
-const track2El = document.getElementById('track2');
 const trackCtrl1 = enableTrackScroll(track1El, { reverse:false, speed:34 });
-const trackCtrl2 = enableTrackScroll(track2El, { reverse:true,  speed:28 });
 
 let lastFrameTime = null;
 function trackTick(ts){
@@ -387,7 +382,6 @@ function trackTick(ts){
   const dt = Math.min((ts - lastFrameTime) / 1000, 0.1);
   lastFrameTime = ts;
   trackCtrl1.step(dt);
-  trackCtrl2.step(dt);
   requestAnimationFrame(trackTick);
 }
 requestAnimationFrame(trackTick);
@@ -396,7 +390,6 @@ document.querySelectorAll('[data-scroll-dir]').forEach(btn => {
   btn.addEventListener('click', () => {
     const mult = parseFloat(btn.getAttribute('data-scroll-dir'));
     trackCtrl1.scrollBy(mult);
-    trackCtrl2.scrollBy(mult);
   });
 });
 
