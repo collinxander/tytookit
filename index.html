@@ -267,7 +267,16 @@
       }
 
       .credits {
-          display: none !important;
+          display: block !important;
+          position: fixed;
+          bottom: 14px;
+          right: 18px;
+          z-index: 210;
+          font-size: 0.72rem;
+          letter-spacing: 0.02rem;
+          color: rgba(255, 255, 255, 0.45);
+          pointer-events: none;
+          text-align: right;
       }
 
       .credits a {
@@ -514,8 +523,8 @@
               height: 50px;
           }
           .credits {
-              font-size: 0.7rem;
-              bottom: 10px;
+              font-size: 0.6rem;
+              bottom: 8px;
               right: 10px;
           }
           #lyrics-container {
