@@ -198,9 +198,17 @@ main{padding:8.2rem var(--pad) 6rem;max-width:1360px;margin:0 auto}
 footer{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.4rem;padding:3rem var(--pad) calc(3rem + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg)}
 footer .big{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(2rem,6vw,4.4rem);line-height:1;letter-spacing:-.03em}
 footer .big em{color:#d77b85}
-footer nav{display:flex;gap:1.6rem;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
+footer nav{display:flex;flex-wrap:wrap;align-items:center;gap:1.6rem;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
 footer nav a{text-decoration:none;opacity:.6;transition:opacity .25s}
 footer nav a:hover{opacity:1}
+.footer-social{display:flex;align-items:center;gap:.7rem}
+.social-ico{
+  display:flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;flex:0 0 auto;
+  border:1px solid rgba(242,239,231,.3);border-radius:50%;opacity:.75;
+  transition:opacity .25s,border-color .25s,background .25s,transform .25s;
+}
+.social-ico svg{width:1.05rem;height:1.05rem}
+.social-ico:hover{opacity:1;border-color:var(--rust);background:rgba(164,34,47,.18);transform:translateY(-2px)}
 
 @media(max-width:1020px){
   .layout{grid-template-columns:1fr}
@@ -213,6 +221,9 @@ footer nav a:hover{opacity:1}
   .form-row,.dt-row{grid-template-columns:1fr}
   .time-grid{grid-template-columns:repeat(2,1fr)}
   header nav{gap:1rem;font-size:.7rem}
+  footer{flex-direction:column;align-items:flex-start;padding-top:2.4rem}
+  footer nav{gap:1rem 1.2rem;width:100%}
+  .footer-social{order:-1;width:100%;justify-content:flex-start;margin-bottom:.4rem}
   .stepper-names span{font-size:0;gap:0}
   .stepper-names span.active{font-size:.72rem;gap:.55rem}
   .review-row .v{text-align:left}
@@ -529,10 +540,16 @@ footer nav a:hover{opacity:1}
     <a href="index.html">Home</a>
     <a href="gallery.html">Gallery</a>
     <a href="booking.html">Bookings</a>
-    <a href="https://www.instagram.com/tyto.okit" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://tiktok.com/@tyto.okit" target="_blank" rel="noopener">TikTok</a>
     <a href="#top">Back to top ↑</a>
   </nav>
+  <div class="footer-social">
+    <a class="social-ico" href="https://www.instagram.com/tyto.okit" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a class="social-ico" href="https://tiktok.com/@tyto.okit" target="_blank" rel="noopener" aria-label="TikTok">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.8 2h-3.1v13.3a2.8 2.8 0 1 1-2-2.7v-3.2a6 6 0 1 0 5.1 5.9V8.8a7.6 7.6 0 0 0 4.2 1.3V7A4.6 4.6 0 0 1 16.8 2z"/></svg>
+    </a>
+  </div>
 </footer>
 
 <script>
