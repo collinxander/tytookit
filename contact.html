@@ -6,521 +6,531 @@
 <title>Bookings — Ty To.ok It</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f2efe7; --bg2:#e9e4d6; --ink:#1c1a15; --dim:#726b5c;
-  --mat:#fbf9f3; --rust:#a4222f; --line:rgba(28,26,21,0.12);
-  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  --mat:#fbf9f3; --rust:#a4222f; --brass:#b48a3a; --line:rgba(28,26,21,0.12);
+  --pad:clamp(1.2rem,4vw,3rem);
+  --ease:cubic-bezier(.16,.8,.24,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;overflow-x:hidden}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{position:relative;isolation:isolate;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body::before{ /* plaster grain */
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .4 0 0 0 0 .3 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 ::selection{background:var(--rust);color:var(--bg)}
+:focus-visible{outline:2px solid var(--rust);outline-offset:3px}
 a,button{font-family:inherit;color:inherit}
 .serif{font-family:'Fraunces',serif}
 
-/* Nav */
+/* ---------- header ---------- */
 header{
   position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;
   display:flex;justify-content:space-between;align-items:center;
-  padding:1.4rem clamp(1.2rem,4vw,2.5rem);
-  background:rgba(242,239,231,0.85);backdrop-filter:blur(10px) saturate(1.2);
+  padding:1.2rem var(--pad);
+  background:rgba(242,239,231,0.82);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2);
   border-bottom:1px solid var(--line);
 }
-header .name{font-family:'Fraunces',serif;font-size:1rem;font-style:italic}
-header nav{display:flex;gap:1.6rem;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:.03em}
-header nav a{opacity:.55;cursor:pointer;transition:opacity .3s;text-decoration:none}
-header nav a:hover,header nav a.on{opacity:1}
+header .name{font-family:'Fraunces',serif;font-size:1.05rem;font-style:italic;text-decoration:none;letter-spacing:-.01em}
+header .name i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--rust);margin-left:.45rem;transform:translateY(-1px)}
+header nav{display:flex;gap:1.8rem;font-size:.76rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+header nav a{position:relative;text-decoration:none;opacity:.5;padding:.3rem 0;transition:opacity .25s}
+header nav a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--rust);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+header nav a:hover{opacity:1}
+header nav a:hover::after,header nav a.on::after{transform:scaleX(1)}
+header nav a.on{opacity:1}
 
-/* Page shell */
-main{padding:8rem clamp(1.2rem,4vw,2.5rem) 6rem;max-width:1200px;margin:0 auto}
+/* ---------- shell ---------- */
+main{padding:8.2rem var(--pad) 6rem;max-width:1360px;margin:0 auto}
+.page-head{margin-bottom:3rem;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:1.5rem 4rem;align-items:end}
+.eyebrow{display:flex;align-items:center;gap:.7rem;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--rust);margin-bottom:1.4rem}
+.eyebrow::before{content:'';width:32px;height:1px;background:var(--rust)}
+.page-head h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(3rem,8vw,6.6rem);line-height:.92;letter-spacing:-.035em}
+.page-head h1 em{color:var(--rust);font-style:italic}
+.page-head p{color:var(--dim);font-size:.95rem;line-height:1.65;max-width:38ch;padding-bottom:.5rem}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.load{opacity:0;animation:rise .9s var(--ease) forwards;animation-delay:var(--d,0s)}
 
-/* Step progress */
-.stepper{max-width:640px;margin:0 auto 2.5rem}
-.stepper-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
-.stepper-label{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--rust)}
-.stepper-track{height:3px;background:var(--line);border-radius:3px;overflow:hidden}
-.stepper-fill{height:100%;width:25%;background:linear-gradient(90deg,var(--rust),#c9784a);transition:width .4s cubic-bezier(.2,.7,.2,1)}
-.stepper-names{display:flex;justify-content:space-between;margin-top:.6rem;font-size:.68rem;color:var(--dim);letter-spacing:.02em}
-.stepper-names span{opacity:.5;transition:opacity .3s ease,color .3s ease}
-.stepper-names span.done,.stepper-names span.active{opacity:1;color:var(--ink);font-weight:600}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:clamp(2rem,5vw,4.5rem);align-items:start}
+
+/* ---------- stepper ---------- */
+.stepper{margin-bottom:2.6rem}
+.stepper-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}
+.stepper-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--rust)}
+.stepper-track{height:2px;background:var(--line);overflow:hidden}
+.stepper-fill{height:100%;width:25%;background:var(--rust);transition:width .6s var(--ease)}
+.stepper-names{display:flex;justify-content:space-between;margin-top:1rem;counter-reset:s}
+.stepper-names span{counter-increment:s;display:flex;align-items:center;gap:.55rem;font-size:.72rem;color:var(--dim);letter-spacing:.04em;opacity:.55;transition:opacity .3s,color .3s}
+.stepper-names span::before{
+  content:counter(s);display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;
+  border:1px solid var(--line);font-size:.64rem;font-weight:600;background:var(--mat);transition:background .3s,border-color .3s,color .3s;
+}
+.stepper-names span.active,.stepper-names span.done{opacity:1;color:var(--ink);font-weight:600}
+.stepper-names span.active::before{background:var(--rust);border-color:var(--rust);color:#fff}
+.stepper-names span.done::before{content:'✓';background:var(--ink);border-color:var(--ink);color:var(--bg)}
 
 .step-panel{display:none}
-.step-panel.active{display:block;animation:stepIn .4s cubic-bezier(.2,.7,.2,1) both}
-@keyframes stepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.step-panel.active{display:block;animation:stepIn .6s var(--ease) both}
+@keyframes stepIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;max-width:640px;margin-left:auto;margin-right:auto}
-.step-nav.wide{max-width:none}
-.btn-ghost{
-  font-size:.8rem;font-weight:600;letter-spacing:.02em;color:var(--dim);background:none;border:none;
-  cursor:pointer;padding:.6rem .4rem;transition:color .2s ease;
+.intro{margin-bottom:2rem}
+.intro h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.025em;line-height:1.05}
+.intro p{color:var(--dim);font-size:.9rem;margin-top:.8rem;max-width:48ch;line-height:1.6}
+
+.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line)}
+.btn-ghost{font-size:.76rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:none;border:none;cursor:pointer;padding:.6rem .2rem;transition:color .2s}
+.btn-ghost:hover{color:var(--rust)}
+.btn-send{
+  display:inline-flex;align-items:center;gap:.8rem;font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:.85rem 1.6rem;border:1px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:999px;
+  cursor:pointer;transition:background .3s,border-color .3s,color .3s;
 }
-.btn-ghost:hover{color:var(--ink)}
-.btn-ghost:disabled{opacity:.35;cursor:default;pointer-events:none}
+.btn-send .arrow{transition:transform .35s var(--ease)}
+.btn-send:hover{background:var(--rust);border-color:var(--rust)}
+.btn-send:hover .arrow{transform:translateX(4px)}
+.btn-send:disabled{cursor:default}
 
-/* Hero */
-.intro{max-width:640px;margin:0 auto 2.2rem;padding:0 .5rem;text-align:center}
-.intro h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(1.8rem,5vw,2.75rem);letter-spacing:-0.01em;line-height:1.1}
-.intro p{color:var(--dim);font-size:.9rem;margin-top:1rem;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6}
-
-/* Pricing grid */
-.pricing-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;
-  margin-bottom:4rem;
-}
+/* ---------- packages ---------- */
+.pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem;margin-bottom:1.6rem}
 .pkg{
-  position:relative;border:1px solid var(--line);border-radius:10px;
-  background:var(--mat);padding:1.8rem 1.8rem 1.6rem;
-  transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, border-color .35s ease;
+  position:relative;border:1px solid var(--line);background:var(--mat);padding:1.9rem 1.8rem 1.7rem;
+  display:flex;flex-direction:column;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .3s;
 }
-.pkg:hover{transform:translateY(-6px);box-shadow:0 24px 48px -20px rgba(28,26,21,.22);border-color:rgba(28,26,21,.22)}
-.pkg.featured{border-color:var(--rust);box-shadow:0 24px 48px -20px rgba(164,34,47,.22)}
-.pkg.selected,.events-pkg.selected{
-  border-color:var(--rust);box-shadow:0 0 0 2px var(--rust), 0 24px 48px -20px rgba(164,34,47,.3);
-}
-.pkg.selected .pkg-cta,.events-pkg.selected .pkg-cta{
-  background:var(--rust);color:#fff;border-color:var(--rust);
-}
-.pkg .ribbon{
-  position:absolute;top:-11px;left:1.8rem;background:var(--rust);color:#fff;
-  font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  padding:.3rem .7rem;border-radius:20px;
-}
-.pkg-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.35rem}
-.pkg-head h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.15rem;line-height:1.25;max-width:70%}
-.pkg-price{font-family:'Fraunces',serif;font-weight:600;font-size:1.4rem;color:var(--rust);white-space:nowrap}
-.pkg-desc{color:var(--dim);font-size:.82rem;line-height:1.5;margin-bottom:.9rem}
-.pkg-duration{
-  display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:600;color:var(--rust);
-  margin-bottom:1rem;
-}
+.pkg::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:var(--rust);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.pkg:hover{transform:translateY(-6px);box-shadow:0 28px 50px -24px rgba(28,26,21,.28)}
+.pkg:hover::before,.pkg.selected::before,.pkg.featured::before{transform:scaleX(1)}
+.pkg.featured{border-color:rgba(164,34,47,.5)}
+.pkg.selected,.events-pkg.selected{border-color:var(--rust);box-shadow:0 0 0 1px var(--rust),0 28px 50px -24px rgba(164,34,47,.35)}
+.pkg .ribbon{position:absolute;top:-11px;right:1.6rem;background:var(--rust);color:#fff;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.32rem .75rem}
+.pkg-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.5rem}
+.pkg-head h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.2rem;line-height:1.2;letter-spacing:-.01em;max-width:70%}
+.pkg-price{font-family:'Fraunces',serif;font-weight:300;font-size:2rem;line-height:1;letter-spacing:-.03em;color:var(--rust);white-space:nowrap}
+.pkg-desc{color:var(--dim);font-size:.82rem;line-height:1.55;margin-bottom:1rem}
+.pkg-duration{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--rust);margin-bottom:1.1rem}
 .pkg-duration svg{width:13px;height:13px;stroke:var(--rust);fill:none;stroke-width:2}
-.pkg-features{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.4rem}
-.pkg-features li{display:flex;gap:.55rem;align-items:flex-start;font-size:.82rem;line-height:1.45;color:var(--ink)}
-.pkg-features li::before{
-  content:'✓';flex:0 0 auto;color:var(--rust);font-weight:700;font-size:.78rem;line-height:1.5;
-}
+.pkg-features{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.6rem;padding-top:1rem;border-top:1px solid var(--line)}
+.pkg-features li{display:flex;gap:.6rem;align-items:flex-start;font-size:.82rem;line-height:1.45}
+.pkg-features li::before{content:'✓';flex:0 0 auto;color:var(--rust);font-weight:700;font-size:.78rem;line-height:1.5}
 .pkg-cta{
-  display:inline-flex;align-items:center;gap:.5rem;width:100%;justify-content:center;
-  font-size:.8rem;font-weight:600;letter-spacing:.02em;
-  padding:.75rem 1rem;border:1px solid var(--ink);border-radius:6px;
-  background:transparent;color:var(--ink);cursor:pointer;transition:background .25s ease,color .25s ease,border-color .25s ease;
+  margin-top:auto;display:inline-flex;align-items:center;gap:.5rem;width:100%;justify-content:center;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:.85rem 1rem;border:1px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);cursor:pointer;
+  transition:background .3s,color .3s,border-color .3s;
 }
 .pkg-cta:hover{background:var(--ink);color:var(--bg)}
 .pkg.featured .pkg-cta{background:var(--rust);border-color:var(--rust);color:#fff}
 .pkg.featured .pkg-cta:hover{background:#8a1c27;border-color:#8a1c27}
+.pkg.selected .pkg-cta,.events-pkg.selected .pkg-cta{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
-/* Events strip */
 .events-pkg{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.2rem;
-  border:1px dashed var(--line);border-radius:10px;padding:1.4rem 1.8rem;margin-bottom:4.5rem;
-  background:var(--bg2);
+  border:1px dashed rgba(28,26,21,.28);padding:1.5rem 1.8rem;background:var(--bg2);transition:border-color .3s,box-shadow .4s;
 }
-.events-pkg h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.1rem}
+.events-pkg h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.2rem}
 .events-pkg p{color:var(--dim);font-size:.82rem;margin-top:.25rem}
-.events-pkg .pkg-price{font-size:1.2rem}
+.events-pkg .pkg-price{font-size:1.6rem}
+.events-pkg .pkg-cta{width:auto;padding:.8rem 1.4rem;margin-top:0}
 
-/* Booking / contact section */
-.book-wrap{
-  display:grid;grid-template-columns:300px 1fr;gap:3.5rem;
-  border-top:1px solid var(--line);padding-top:3.5rem;
-}
-.book-info h2{font-family:'Fraunces',serif;font-weight:400;font-size:1.6rem;margin-bottom:.8rem}
-.book-info p{color:var(--dim);font-size:.85rem;line-height:1.6;max-width:32ch;margin-bottom:1.6rem}
-.info-rows{border-top:1px solid var(--line)}
-.info-row{display:flex;justify-content:space-between;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--line)}
-.info-row .k{font-size:.7rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.04em}
-.info-row .v{font-size:.85rem;font-weight:600;text-align:right}
-.info-row .v a{border-bottom:1px solid transparent}
-.info-row .v a:hover{border-bottom-color:var(--ink)}
-.social-list{margin-top:1.4rem;font-size:.78rem;line-height:1.8;color:var(--dim)}
-.social-list a{font-weight:600;color:var(--dim);border-bottom:1px solid transparent}
-.social-list a:hover{color:var(--ink);border-bottom-color:var(--ink)}
-
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
-.field{margin-bottom:1.5rem}
-.field label{display:block;font-size:.7rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem}
-.field input,.field textarea,.field select{
-  width:100%;border:none;border-bottom:1px solid var(--line);background:transparent;
-  font-family:inherit;font-size:.9rem;color:var(--ink);padding:.5rem 0;outline:none;
-  transition:border-color .2s ease;appearance:none;
-}
-.field textarea{resize:vertical;min-height:110px}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--ink)}
-.field select{
-  cursor:pointer;
-  background-image:linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
-  background-position: calc(100% - 8px) 12px, calc(100% - 3px) 12px;
-  background-size:6px 6px, 6px 6px;background-repeat:no-repeat;
-}
-.btn-send{
-  display:inline-flex;align-items:center;gap:.6rem;font-size:.8rem;font-weight:700;letter-spacing:.02em;
-  padding:.7rem 1.4rem;border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:6px;
-  cursor:pointer;transition:background .2s ease,color .2s ease;
-}
-.btn-send .arrow{transition:transform .2s ease}
-.btn-send:hover{background:var(--ink);color:var(--bg)}
-.btn-send:hover .arrow{transform:translateX(3px)}
-.form-note{margin-top:1rem;font-size:.72rem;color:var(--dim);max-width:44ch}
-
-/* Step 2 — date & time */
-.datetime-wrap{max-width:640px;margin:0 auto}
-.dt-row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-bottom:1.6rem}
-.dt-field label{display:block;font-size:.7rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem}
-.dt-field input[type="date"]{
-  width:100%;border:1px solid var(--line);border-radius:8px;background:var(--mat);
-  font-family:inherit;font-size:.9rem;color:var(--ink);padding:.75rem .9rem;outline:none;
-  transition:border-color .2s ease;
-}
+/* ---------- date & time ---------- */
+.datetime-wrap{max-width:680px}
+.dt-row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-bottom:1.8rem}
+.dt-field label{display:block;font-size:.66rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.6rem}
+.dt-field input[type="date"]{width:100%;border:1px solid var(--line);background:var(--mat);font-family:inherit;font-size:.9rem;color:var(--ink);padding:.8rem .95rem;outline:none;transition:border-color .2s}
 .dt-field input[type="date"]:focus{border-color:var(--rust)}
-.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
-.time-slot{
-  border:1px solid var(--line);border-radius:8px;background:var(--mat);
-  padding:.65rem .4rem;font-size:.78rem;font-weight:600;color:var(--ink);
-  cursor:pointer;text-align:center;transition:all .2s ease;
-}
-.time-slot:hover{border-color:var(--ink)}
+.tz-input{width:100%;border:1px solid var(--line);background:var(--bg2);padding:.8rem .95rem;font-size:.85rem;color:var(--dim)}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.55rem}
+.time-slot{border:1px solid var(--line);background:var(--mat);padding:.7rem .4rem;font-size:.78rem;font-weight:600;color:var(--ink);cursor:pointer;text-align:center;transition:background .25s,border-color .25s,color .25s,transform .25s var(--ease)}
+.time-slot:hover{border-color:var(--ink);transform:translateY(-2px)}
 .time-slot.selected{background:var(--rust);border-color:var(--rust);color:#fff}
-.selected-summary{
-  margin-top:1.8rem;padding:1rem 1.2rem;border:1px dashed var(--line);border-radius:8px;
-  background:var(--bg2);font-size:.82rem;color:var(--dim);display:flex;align-items:center;gap:.6rem;
-}
+.selected-summary{margin-top:1.8rem;padding:1rem 1.2rem;border:1px dashed rgba(28,26,21,.28);background:var(--bg2);font-size:.84rem;color:var(--dim);display:flex;align-items:center;gap:.6rem}
 .selected-summary strong{color:var(--ink)}
-.step-error{
-  margin-top:.9rem;font-size:.82rem;color:var(--rust);min-height:1.1em;
-  opacity:0;transform:translateY(-4px);transition:opacity .2s ease, transform .2s ease;
-}
-.step-error.show{opacity:1;transform:translateY(0)}
-.field.invalid input,.field.invalid select{border-color:var(--rust);box-shadow:0 0 0 1px var(--rust)}
-@keyframes shakeErr{
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-6px)}
-  40%{transform:translateX(6px)}
-  60%{transform:translateX(-4px)}
-  80%{transform:translateX(4px)}
-}
+.step-error{margin-top:1rem;font-size:.82rem;color:var(--rust);min-height:1.1em;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s}
+.step-error.show{opacity:1;transform:none}
+@keyframes shakeErr{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 .shake{animation:shakeErr .35s ease}
 
-/* Step 4 — review */
-.review-wrap{max-width:640px;margin:0 auto}
-.review-card{border:1px solid var(--line);border-radius:10px;background:var(--mat);overflow:hidden;margin-bottom:1.6rem}
-.review-card .rc-head{
-  padding:1rem 1.4rem;border-bottom:1px solid var(--line);background:var(--bg2);
-  font-family:'Fraunces',serif;font-size:1rem;
+/* ---------- form ---------- */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+.field{margin-bottom:1.6rem}
+.field label{display:block;font-size:.66rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem}
+.field input,.field textarea,.field select{
+  width:100%;border:none;border-bottom:1px solid rgba(28,26,21,.25);background:transparent;
+  font-family:inherit;font-size:.95rem;color:var(--ink);padding:.55rem 0;outline:none;transition:border-color .25s;appearance:none;border-radius:0;
 }
-.review-row{display:flex;justify-content:space-between;gap:1rem;padding:.85rem 1.4rem;border-bottom:1px solid var(--line);font-size:.85rem}
+.field textarea{resize:vertical;min-height:120px}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--rust)}
+.field select{cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);background-position:calc(100% - 8px) 14px,calc(100% - 3px) 14px;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+.field.invalid input,.field.invalid select{border-color:var(--rust);box-shadow:0 1px 0 0 var(--rust)}
+
+/* ---------- review ---------- */
+.review-wrap{max-width:680px}
+.review-card{border:1px solid var(--line);background:var(--mat);overflow:hidden;margin-bottom:1.4rem}
+.review-card .rc-head{padding:1rem 1.4rem;border-bottom:1px solid var(--line);background:var(--bg2);font-family:'Fraunces',serif;font-size:1.05rem}
+.review-row{display:flex;justify-content:space-between;gap:1rem;padding:.9rem 1.4rem;border-bottom:1px solid var(--line);font-size:.86rem}
 .review-row:last-child{border-bottom:none}
 .review-row .k{color:var(--dim)}
 .review-row .v{font-weight:600;text-align:right}
-.review-total{
-  display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.4rem;
-  background:var(--ink);color:var(--bg);
-}
-.review-total .k{font-size:.85rem;opacity:.75}
-.review-total .v{font-family:'Fraunces',serif;font-size:1.3rem;color:#fff}
-.deposit-note{font-size:.75rem;color:var(--dim);text-align:center;margin-top:1rem}
+.review-total{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 1.4rem;background:var(--ink);color:var(--bg)}
+.review-total .k{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.review-total .v{font-family:'Fraunces',serif;font-weight:300;font-size:1.8rem;letter-spacing:-.02em;color:#fff}
+.deposit-note{font-size:.76rem;color:var(--dim);margin-top:1rem;line-height:1.6}
 
-footer{
-  border-top:1px solid var(--line);padding:1.4rem clamp(1.2rem,4vw,2.5rem) 2rem;
-  display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem;
-  font-size:.75rem;color:var(--dim);max-width:1200px;margin:0 auto;
-}
-footer a:hover{color:var(--ink)}
+/* ---------- live summary ---------- */
+.summary{position:sticky;top:6.6rem;background:var(--mat);border:1px solid var(--line);box-shadow:0 30px 50px -30px rgba(28,26,21,.35);border-left:2px solid var(--rust)}
+.summary-head{padding:1.1rem 1.3rem;background:var(--bg2);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
+.summary-head b{font-family:'Fraunces',serif;font-weight:500;font-size:1.1rem}
+.summary-head span{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rust);font-weight:700}
+.sum-row{padding:.95rem 1.3rem;border-bottom:1px solid var(--line)}
+.sum-row .k{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:.25rem}
+.sum-row .v{font-size:.9rem;font-weight:500;transition:color .3s}
+.sum-row .v.empty{color:var(--dim);opacity:.6;font-weight:400}
+.sum-total{display:flex;justify-content:space-between;align-items:baseline;padding:1.2rem 1.3rem;background:var(--ink);color:var(--bg)}
+.sum-total .k{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.sum-total .v{font-family:'Fraunces',serif;font-weight:300;font-size:1.9rem;letter-spacing:-.03em;color:#fff}
+.summary-note{padding:.9rem 1.3rem 1.1rem;font-size:.72rem;line-height:1.55;color:var(--dim)}
 
-@media(max-width:860px){
+/* ---------- footer ---------- */
+footer{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.4rem;padding:3rem var(--pad) calc(3rem + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg)}
+footer .big{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(2rem,6vw,4.4rem);line-height:1;letter-spacing:-.03em}
+footer .big em{color:#d77b85}
+footer nav{display:flex;gap:1.6rem;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
+footer nav a{text-decoration:none;opacity:.6;transition:opacity .25s}
+footer nav a:hover{opacity:1}
+
+@media(max-width:1020px){
+  .layout{grid-template-columns:1fr}
+  .summary{display:none}
+  .page-head{grid-template-columns:1fr}
+}
+@media(max-width:700px){
   main{padding-top:7rem}
   .pricing-grid{grid-template-columns:1fr}
-  .book-wrap{grid-template-columns:1fr;gap:2.2rem}
-  .form-row{grid-template-columns:1fr}
-  .info-row .v{text-align:left}
-  header nav{gap:1rem;font-size:.7rem}
-  .dt-row{grid-template-columns:1fr}
+  .form-row,.dt-row{grid-template-columns:1fr}
   .time-grid{grid-template-columns:repeat(2,1fr)}
-  .stepper-names span{font-size:.6rem}
+  header nav{gap:1rem;font-size:.7rem}
+  .stepper-names span{font-size:0;gap:0}
+  .stepper-names span.active{font-size:.72rem;gap:.55rem}
+  .review-row .v{text-align:left}
 }
-@media(prefers-reduced-motion:reduce){*{transition-duration:.001ms!important}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .load{opacity:1;animation:none}
+  *{transition-duration:.001ms!important}
+}
 </style>
 </head>
-<body>
+<body id="top">
 
 <header>
-  <span class="name serif">Ty To.ok It</span>
+  <a class="name serif" href="index.html">Ty To.ok It<i></i></a>
   <nav>
     <a href="index.html">Home</a>
     <a href="gallery.html">Gallery</a>
     <a href="about.html">About</a>
-    <a href="contact.html" class="on">Bookings</a>
+    <a href="contact.html" class="on" aria-current="page">Bookings</a>
   </nav>
 </header>
 
 <main>
-  <div class="stepper">
-    <div class="stepper-top">
-      <span class="stepper-label" id="stepLabel">Step 1 of 4</span>
+  <div class="page-head">
+    <div>
+      <div class="eyebrow load" style="--d:.05s">Index — 004 / Bookings</div>
+      <h1 class="serif load" style="--d:.15s">Book a <em>session</em></h1>
     </div>
-    <div class="stepper-track"><div class="stepper-fill" id="stepperFill"></div></div>
-    <div class="stepper-names">
-      <span class="active" data-step="1">Package</span>
-      <span data-step="2">Date &amp; Time</span>
-      <span data-step="3">Your Info</span>
-      <span data-step="4">Review</span>
-    </div>
+    <p class="load" style="--d:.3s">Individual and group photoshoot sessions across Houston. Four quick steps — pick a package, choose a time, tell me about you, and confirm.</p>
   </div>
 
-  <!-- STEP 1: Package -->
-  <section class="step-panel active" id="step1">
-    <div class="intro">
-      <h1 class="serif">Choose Your Package</h1>
-      <p>Individual and group photoshoot sessions across Houston. Pick a package to continue.</p>
-    </div>
+  <div class="layout">
+    <div class="wizard">
 
-    <section class="pricing-grid">
-      <div class="pkg" data-pkg="Take 1 — Individual" data-price="$250">
-        <div class="pkg-head">
-          <h3>Take 1 — Individual</h3>
-          <span class="pkg-price">$250</span>
+      <div class="stepper">
+        <div class="stepper-top">
+          <span class="stepper-label" id="stepLabel">Step 1 of 4</span>
         </div>
-        <p class="pkg-desc">A focused individual session, perfect for a first shoot together.</p>
-        <span class="pkg-duration">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          10 edited photos
-        </span>
-        <ul class="pkg-features">
-          <li>1 location</li>
-          <li>2 outfits</li>
-          <li>Individual portraits</li>
-          <li>$50 deposit required</li>
-        </ul>
-        <button class="pkg-cta" type="button">Select package</button>
-      </div>
-
-      <div class="pkg featured" data-pkg="Take 2 — Individual" data-price="$275">
-        <span class="ribbon">Most booked</span>
-        <div class="pkg-head">
-          <h3>Take 2 — Individual</h3>
-          <span class="pkg-price">$275</span>
-        </div>
-        <p class="pkg-desc">More looks, more locations — room to explore a bigger story.</p>
-        <span class="pkg-duration">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          15 edited photos
-        </span>
-        <ul class="pkg-features">
-          <li>2 locations</li>
-          <li>3 outfits</li>
-          <li>Individual portraits</li>
-          <li>$50 deposit required</li>
-        </ul>
-        <button class="pkg-cta" type="button">Select package</button>
-      </div>
-
-      <div class="pkg" data-pkg="Take 3 — Individual/Group" data-price="$300">
-        <div class="pkg-head">
-          <h3>Take 3 — Individual / Group</h3>
-          <span class="pkg-price">$300</span>
-        </div>
-        <p class="pkg-desc">Great for duos or small groups wanting a shared archive.</p>
-        <span class="pkg-duration">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          20 edited photos
-        </span>
-        <ul class="pkg-features">
-          <li>1 location</li>
-          <li>2 outfits</li>
-          <li>Individual or group portraits</li>
-          <li>$65 group deposit required</li>
-        </ul>
-        <button class="pkg-cta" type="button">Select package</button>
-      </div>
-
-      <div class="pkg" data-pkg="Take 4 — Individual/Group" data-price="$325">
-        <div class="pkg-head">
-          <h3>Take 4 — Individual / Group</h3>
-          <span class="pkg-price">$325</span>
-        </div>
-        <p class="pkg-desc">The full-set experience — multiple looks and locations.</p>
-        <span class="pkg-duration">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          20 edited photos
-        </span>
-        <ul class="pkg-features">
-          <li>2 locations</li>
-          <li>3 outfits</li>
-          <li>Individual or group portraits</li>
-          <li>$65 group deposit required</li>
-        </ul>
-        <button class="pkg-cta" type="button">Select package</button>
-      </div>
-    </section>
-
-    <section class="events-pkg" data-pkg="Take 5 — Events" data-price="$150/hr">
-      <div>
-        <h3 class="serif">Take 5 — Events</h3>
-        <p>Hourly coverage for shows, exhibitions, and gatherings.</p>
-      </div>
-      <span class="pkg-price">$150 / hr</span>
-      <button class="pkg-cta" style="width:auto" type="button">Select package</button>
-    </section>
-
-    <p class="step-error" id="step1Error" style="max-width:640px;margin-left:auto;margin-right:auto"></p>
-
-    <div class="step-nav" style="max-width:640px">
-      <span></span>
-      <button class="btn-send" type="button" data-next data-step-target="1">Continue <span class="arrow">→</span></button>
-    </div>
-  </section>
-
-  <!-- STEP 2: Date & Time -->
-  <section class="step-panel" id="step2">
-    <div class="intro">
-      <h1 class="serif">Pick a Date &amp; Time</h1>
-      <p>Choose when you'd like your session to take place. Availability is confirmed once your deposit clears.</p>
-    </div>
-
-    <div class="datetime-wrap">
-      <div class="dt-row">
-        <div class="dt-field">
-          <label for="shootDate">Date</label>
-          <input type="date" id="shootDate" name="shootDate" />
-        </div>
-        <div class="dt-field">
-          <label>Time zone</label>
-          <input type="text" value="Central Time — US &amp; Canada" disabled
-            style="width:100%;border:1px solid var(--line);border-radius:8px;background:var(--bg2);padding:.75rem .9rem;font-size:.85rem;color:var(--dim)" />
+        <div class="stepper-track"><div class="stepper-fill" id="stepperFill"></div></div>
+        <div class="stepper-names">
+          <span class="active" data-step="1">Package</span>
+          <span data-step="2">Date &amp; Time</span>
+          <span data-step="3">Your Info</span>
+          <span data-step="4">Review</span>
         </div>
       </div>
 
-      <div class="dt-field">
-        <label>Available times</label>
-        <div class="time-grid" id="timeGrid">
-          <button type="button" class="time-slot">10:00 AM</button>
-          <button type="button" class="time-slot">10:30 AM</button>
-          <button type="button" class="time-slot">11:00 AM</button>
-          <button type="button" class="time-slot">11:30 AM</button>
-          <button type="button" class="time-slot">12:00 PM</button>
-          <button type="button" class="time-slot">12:30 PM</button>
-          <button type="button" class="time-slot">1:00 PM</button>
-          <button type="button" class="time-slot">1:30 PM</button>
-          <button type="button" class="time-slot">2:00 PM</button>
-          <button type="button" class="time-slot">2:30 PM</button>
-          <button type="button" class="time-slot">3:00 PM</button>
-          <button type="button" class="time-slot">3:30 PM</button>
-          <button type="button" class="time-slot">4:00 PM</button>
-          <button type="button" class="time-slot">4:30 PM</button>
-          <button type="button" class="time-slot">5:00 PM</button>
-          <button type="button" class="time-slot">5:30 PM</button>
-          <button type="button" class="time-slot">6:00 PM</button>
-          <button type="button" class="time-slot">6:30 PM</button>
-          <button type="button" class="time-slot">7:00 PM</button>
-          <button type="button" class="time-slot">7:30 PM</button>
+      <!-- STEP 1: Package -->
+      <section class="step-panel active" id="step1">
+        <div class="intro">
+          <h2>Choose your package</h2>
+          <p>Pick a package to continue. You can change it any time before you confirm.</p>
         </div>
-      </div>
 
-      <div class="selected-summary" id="dtSummary">
-        <span>📅 Select a date and time to continue</span>
-      </div>
-      <p class="step-error" id="step2Error"></p>
-    </div>
-
-    <div class="step-nav">
-      <button class="btn-ghost" type="button" data-back>← Back</button>
-      <button class="btn-send" type="button" data-next data-step-target="2">Continue <span class="arrow">→</span></button>
-    </div>
-  </section>
-
-  <!-- STEP 3: Your Info -->
-  <section class="step-panel" id="step3">
-    <div class="intro">
-      <h1 class="serif">Your Information</h1>
-      <p>Tell us a bit about you and the shoot so we can prepare.</p>
-    </div>
-
-    <div class="datetime-wrap">
-      <form id="contactForm">
-        <div class="form-row">
-          <div class="field">
-            <label for="fname">Name</label>
-            <input type="text" id="fname" name="name" placeholder="Full name" required />
+        <section class="pricing-grid">
+          <div class="pkg" data-pkg="Take 1 — Individual" data-price="$250">
+            <div class="pkg-head">
+              <h3>Take 1 — Individual</h3>
+              <span class="pkg-price">$250</span>
+            </div>
+            <p class="pkg-desc">A focused individual session, perfect for a first shoot together.</p>
+            <span class="pkg-duration">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              10 edited photos
+            </span>
+            <ul class="pkg-features">
+              <li>1 location</li>
+              <li>2 outfits</li>
+              <li>Individual portraits</li>
+              <li>$50 deposit required</li>
+            </ul>
+            <button class="pkg-cta" type="button">Select package</button>
           </div>
-          <div class="field">
-            <label for="finsta">Instagram handle</label>
-            <input type="text" id="finsta" name="instagram" placeholder="@yourhandle" required />
+
+          <div class="pkg featured" data-pkg="Take 2 — Individual" data-price="$275">
+            <span class="ribbon">Most booked</span>
+            <div class="pkg-head">
+              <h3>Take 2 — Individual</h3>
+              <span class="pkg-price">$275</span>
+            </div>
+            <p class="pkg-desc">More looks, more locations — room to explore a bigger story.</p>
+            <span class="pkg-duration">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              15 edited photos
+            </span>
+            <ul class="pkg-features">
+              <li>2 locations</li>
+              <li>3 outfits</li>
+              <li>Individual portraits</li>
+              <li>$50 deposit required</li>
+            </ul>
+            <button class="pkg-cta" type="button">Select package</button>
           </div>
-        </div>
 
-        <div class="form-row">
-          <div class="field">
-            <label for="femail">Email</label>
-            <input type="email" id="femail" name="email" placeholder="you@example.com" required />
+          <div class="pkg" data-pkg="Take 3 — Individual/Group" data-price="$300">
+            <div class="pkg-head">
+              <h3>Take 3 — Individual / Group</h3>
+              <span class="pkg-price">$300</span>
+            </div>
+            <p class="pkg-desc">Great for duos or small groups wanting a shared archive.</p>
+            <span class="pkg-duration">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              20 edited photos
+            </span>
+            <ul class="pkg-features">
+              <li>1 location</li>
+              <li>2 outfits</li>
+              <li>Individual or group portraits</li>
+              <li>$65 group deposit required</li>
+            </ul>
+            <button class="pkg-cta" type="button">Select package</button>
           </div>
-          <div class="field">
-            <label for="flocation">Shoot location</label>
-            <select id="flocation" name="location">
-              <option>Houston studio</option>
-              <option>Outdoor / on-location</option>
-              <option>Client's choice</option>
-              <option>Other</option>
-            </select>
+
+          <div class="pkg" data-pkg="Take 4 — Individual/Group" data-price="$325">
+            <div class="pkg-head">
+              <h3>Take 4 — Individual / Group</h3>
+              <span class="pkg-price">$325</span>
+            </div>
+            <p class="pkg-desc">The full-set experience — multiple looks and locations.</p>
+            <span class="pkg-duration">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              20 edited photos
+            </span>
+            <ul class="pkg-features">
+              <li>2 locations</li>
+              <li>3 outfits</li>
+              <li>Individual or group portraits</li>
+              <li>$65 group deposit required</li>
+            </ul>
+            <button class="pkg-cta" type="button">Select package</button>
           </div>
+        </section>
+
+        <section class="events-pkg" data-pkg="Take 5 — Events" data-price="$150/hr">
+          <div>
+            <h3 class="serif">Take 5 — Events</h3>
+            <p>Hourly coverage for shows, exhibitions, and gatherings.</p>
+          </div>
+          <span class="pkg-price">$150 / hr</span>
+          <button class="pkg-cta" type="button">Select package</button>
+        </section>
+
+        <p class="step-error" id="step1Error"></p>
+
+        <div class="step-nav">
+          <span></span>
+          <button class="btn-send" type="button" data-next data-step-target="1">Continue <span class="arrow">→</span></button>
+        </div>
+      </section>
+
+      <!-- STEP 2: Date & Time -->
+      <section class="step-panel" id="step2">
+        <div class="intro">
+          <h2>Pick a date &amp; time</h2>
+          <p>Choose when you'd like your session to take place. Availability is confirmed once your deposit clears.</p>
         </div>
 
-        <div class="field">
-          <label for="fmessage">Message</label>
-          <textarea id="fmessage" name="message" placeholder="Any details about the shoot, outfits, or vision..."></textarea>
+        <div class="datetime-wrap">
+          <div class="dt-row">
+            <div class="dt-field">
+              <label for="shootDate">Date</label>
+              <input type="date" id="shootDate" name="shootDate" />
+            </div>
+            <div class="dt-field">
+              <label>Time zone</label>
+              <input class="tz-input" type="text" value="Central Time — US &amp; Canada" disabled />
+            </div>
+          </div>
+
+          <div class="dt-field">
+            <label>Available times</label>
+            <div class="time-grid" id="timeGrid">
+              <button type="button" class="time-slot">10:00 AM</button>
+              <button type="button" class="time-slot">10:30 AM</button>
+              <button type="button" class="time-slot">11:00 AM</button>
+              <button type="button" class="time-slot">11:30 AM</button>
+              <button type="button" class="time-slot">12:00 PM</button>
+              <button type="button" class="time-slot">12:30 PM</button>
+              <button type="button" class="time-slot">1:00 PM</button>
+              <button type="button" class="time-slot">1:30 PM</button>
+              <button type="button" class="time-slot">2:00 PM</button>
+              <button type="button" class="time-slot">2:30 PM</button>
+              <button type="button" class="time-slot">3:00 PM</button>
+              <button type="button" class="time-slot">3:30 PM</button>
+              <button type="button" class="time-slot">4:00 PM</button>
+              <button type="button" class="time-slot">4:30 PM</button>
+              <button type="button" class="time-slot">5:00 PM</button>
+              <button type="button" class="time-slot">5:30 PM</button>
+              <button type="button" class="time-slot">6:00 PM</button>
+              <button type="button" class="time-slot">6:30 PM</button>
+              <button type="button" class="time-slot">7:00 PM</button>
+              <button type="button" class="time-slot">7:30 PM</button>
+            </div>
+          </div>
+
+          <div class="selected-summary" id="dtSummary">
+            <span>📅 Select a date and time to continue</span>
+          </div>
+          <p class="step-error" id="step2Error"></p>
         </div>
-      </form>
-      <p class="step-error" id="step3Error"></p>
-    </div>
 
-    <div class="step-nav">
-      <button class="btn-ghost" type="button" data-back>← Back</button>
-      <button class="btn-send" type="button" data-next data-step-target="3">Continue <span class="arrow">→</span></button>
-    </div>
-  </section>
-
-  <!-- STEP 4: Review -->
-  <section class="step-panel" id="step4">
-    <div class="intro">
-      <h1 class="serif">Review Your Booking</h1>
-      <p>Double check the details below, then confirm to send your request.</p>
-    </div>
-
-    <div class="review-wrap">
-      <div class="review-card">
-        <div class="rc-head">Session details</div>
-        <div class="review-row"><span class="k">Package</span><span class="v" id="rvPackage">—</span></div>
-        <div class="review-row"><span class="k">Date</span><span class="v" id="rvDate">—</span></div>
-        <div class="review-row"><span class="k">Time</span><span class="v" id="rvTime">—</span></div>
-        <div class="review-row"><span class="k">Location</span><span class="v" id="rvLocation">—</span></div>
-      </div>
-
-      <div class="review-card">
-        <div class="rc-head">Your information</div>
-        <div class="review-row"><span class="k">Name</span><span class="v" id="rvName">—</span></div>
-        <div class="review-row"><span class="k">Instagram</span><span class="v" id="rvInsta">—</span></div>
-        <div class="review-row"><span class="k">Email</span><span class="v" id="rvEmail">—</span></div>
-      </div>
-
-      <div class="review-card">
-        <div class="review-total">
-          <span class="k">Package price</span>
-          <span class="v" id="rvPrice">—</span>
+        <div class="step-nav">
+          <button class="btn-ghost" type="button" data-back>← Back</button>
+          <button class="btn-send" type="button" data-next data-step-target="2">Continue <span class="arrow">→</span></button>
         </div>
-      </div>
-      <p class="deposit-note">A deposit confirms your session. Remaining balance is due on the day of the shoot.</p>
+      </section>
+
+      <!-- STEP 3: Your Info -->
+      <section class="step-panel" id="step3">
+        <div class="intro">
+          <h2>Your information</h2>
+          <p>Tell us a bit about you and the shoot so we can prepare.</p>
+        </div>
+
+        <div class="datetime-wrap">
+          <form id="contactForm" onsubmit="return false">
+            <div class="form-row">
+              <div class="field">
+                <label for="fname">Name</label>
+                <input type="text" id="fname" name="name" placeholder="Full name" required />
+              </div>
+              <div class="field">
+                <label for="finsta">Instagram handle</label>
+                <input type="text" id="finsta" name="instagram" placeholder="@yourhandle" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="femail">Email</label>
+                <input type="email" id="femail" name="email" placeholder="you@example.com" required />
+              </div>
+              <div class="field">
+                <label for="flocation">Shoot location</label>
+                <select id="flocation" name="location">
+                  <option>Houston studio</option>
+                  <option>Outdoor / on-location</option>
+                  <option>Client's choice</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="fmessage">Message</label>
+              <textarea id="fmessage" name="message" placeholder="Any details about the shoot, outfits, or vision..."></textarea>
+            </div>
+          </form>
+          <p class="step-error" id="step3Error"></p>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn-ghost" type="button" data-back>← Back</button>
+          <button class="btn-send" type="button" data-next data-step-target="3">Continue <span class="arrow">→</span></button>
+        </div>
+      </section>
+
+      <!-- STEP 4: Review -->
+      <section class="step-panel" id="step4">
+        <div class="intro">
+          <h2>Review your booking</h2>
+          <p>Double check the details below, then confirm to send your request.</p>
+        </div>
+
+        <div class="review-wrap">
+          <div class="review-card">
+            <div class="rc-head">Session details</div>
+            <div class="review-row"><span class="k">Package</span><span class="v" id="rvPackage">—</span></div>
+            <div class="review-row"><span class="k">Date</span><span class="v" id="rvDate">—</span></div>
+            <div class="review-row"><span class="k">Time</span><span class="v" id="rvTime">—</span></div>
+            <div class="review-row"><span class="k">Location</span><span class="v" id="rvLocation">—</span></div>
+          </div>
+
+          <div class="review-card">
+            <div class="rc-head">Your information</div>
+            <div class="review-row"><span class="k">Name</span><span class="v" id="rvName">—</span></div>
+            <div class="review-row"><span class="k">Instagram</span><span class="v" id="rvInsta">—</span></div>
+            <div class="review-row"><span class="k">Email</span><span class="v" id="rvEmail">—</span></div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-total">
+              <span class="k">Package price</span>
+              <span class="v" id="rvPrice">—</span>
+            </div>
+          </div>
+          <p class="deposit-note">A deposit confirms your session. Remaining balance is due on the day of the shoot.</p>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn-ghost" type="button" data-back>← Back</button>
+          <button class="btn-send" type="button" id="confirmBtn">Confirm booking <span class="arrow">→</span></button>
+        </div>
+      </section>
+
     </div>
 
-    <div class="step-nav" style="max-width:640px">
-      <button class="btn-ghost" type="button" data-back>← Back</button>
-      <button class="btn-send" type="button" id="confirmBtn">Confirm booking <span class="arrow">→</span></button>
-    </div>
-
-  </section>
+    <!-- Live summary -->
+    <aside class="summary" aria-label="Your booking so far">
+      <div class="summary-head"><b>Your booking</b><span>Live</span></div>
+      <div class="sum-row"><div class="k">Package</div><div class="v empty" id="sumPackage">Not chosen yet</div></div>
+      <div class="sum-row"><div class="k">Date</div><div class="v empty" id="sumDate">Not chosen yet</div></div>
+      <div class="sum-row"><div class="k">Time</div><div class="v empty" id="sumTime">Not chosen yet</div></div>
+      <div class="sum-total"><span class="k">Package price</span><span class="v" id="sumPrice">—</span></div>
+      <p class="summary-note">A deposit confirms your session. Remaining balance is due on the day of the shoot.</p>
+    </aside>
+  </div>
 </main>
 
 <footer>
-  <span>Ty To.ok It — Studio</span>
-  <a href="#top">Back to top ↑</a>
+  <div class="big serif">  <em></em><br /></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="#top">Back to top ↑</a>
+  </nav>
 </footer>
 
 <script>
@@ -550,17 +560,41 @@ footer a:hover{color:var(--ink)}
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
+  // ---- Live summary ----
+  function setSum(id, text){
+    const el = document.getElementById(id);
+    if (text){ el.textContent = text; el.classList.remove('empty'); }
+    else { el.textContent = 'Not chosen yet'; el.classList.add('empty'); }
+  }
+  function prettyDate(){
+    return dateInput.value
+      ? new Date(dateInput.value+'T00:00:00').toLocaleDateString('en-US',{weekday:'short', month:'long', day:'numeric', year:'numeric'})
+      : '';
+  }
+  function updateSummary(){
+    setSum('sumPackage', selectedPackage);
+    setSum('sumDate', prettyDate());
+    setSum('sumTime', selectedTime);
+    document.getElementById('sumPrice').textContent = selectedPrice || '—';
+  }
+
   // ---- Step 1: package selection ----
   const pkgCards = document.querySelectorAll('.pkg, .events-pkg');
   pkgCards.forEach(card=>{
     const btn = card.querySelector('.pkg-cta');
     if (!btn) return;
     btn.addEventListener('click', ()=>{
-      pkgCards.forEach(c=>c.classList.remove('selected'));
+      pkgCards.forEach(c=>{
+        c.classList.remove('selected');
+        const b = c.querySelector('.pkg-cta');
+        if (b) b.textContent = 'Select package';
+      });
       card.classList.add('selected');
+      btn.textContent = 'Selected ✓';
       selectedPackage = card.getAttribute('data-pkg');
       selectedPrice = card.getAttribute('data-price');
       clearError(document.getElementById('step1Error'));
+      updateSummary();
     });
   });
 
@@ -568,6 +602,13 @@ footer a:hover{color:var(--ink)}
   const dtSummary = document.getElementById('dtSummary');
   const dateInput = document.getElementById('shootDate');
   const timeSlots = document.querySelectorAll('.time-slot');
+
+  // no booking dates in the past
+  (function setMinDate(){
+    const t = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    dateInput.min = `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;
+  })();
 
   function updateDtSummary(){
     if (dateInput.value && selectedTime){
@@ -577,6 +618,7 @@ footer a:hover{color:var(--ink)}
     } else {
       dtSummary.innerHTML = '📅 Select a date and time to continue';
     }
+    updateSummary();
   }
   dateInput.addEventListener('change', updateDtSummary);
   timeSlots.forEach(slot=>{
