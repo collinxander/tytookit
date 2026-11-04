@@ -379,13 +379,13 @@ footer nav a:hover{opacity:1}
       <section class="step-panel" id="step2">
         <div class="intro">
           <h2>Pick a date &amp; time</h2>
-          <p>Choose when you'd like your session to take place. Availability is confirmed once your deposit clears.</p>
+          <p>Ty books weekends only — Saturdays &amp; Sundays, 12:00 PM – 8:00 PM. Availability is confirmed once your deposit clears.</p>
         </div>
 
         <div class="datetime-wrap">
           <div class="dt-row">
             <div class="dt-field">
-              <label for="shootDate">Date</label>
+              <label for="shootDate">Date (Saturdays &amp; Sundays only)</label>
               <input type="date" id="shootDate" name="shootDate" />
             </div>
             <div class="dt-field">
@@ -397,10 +397,6 @@ footer nav a:hover{opacity:1}
           <div class="dt-field">
             <label>Available times</label>
             <div class="time-grid" id="timeGrid">
-              <button type="button" class="time-slot">10:00 AM</button>
-              <button type="button" class="time-slot">10:30 AM</button>
-              <button type="button" class="time-slot">11:00 AM</button>
-              <button type="button" class="time-slot">11:30 AM</button>
               <button type="button" class="time-slot">12:00 PM</button>
               <button type="button" class="time-slot">12:30 PM</button>
               <button type="button" class="time-slot">1:00 PM</button>
@@ -630,6 +626,22 @@ footer nav a:hover{opacity:1}
     dateInput.min = `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;
   })();
 
+  // Ty only books weekends (Sat/Sun) — reject weekday picks with a friendly nudge
+  function isWeekend(dateStr){
+    if (!dateStr) return true;
+    const day = new Date(dateStr + 'T00:00:00').getDay();
+    return day === 0 || day === 6;
+  }
+  dateInput.addEventListener('change', ()=>{
+    if (dateInput.value && !isWeekend(dateInput.value)){
+      showError(document.getElementById('step2Error'), 'Ty only books Saturdays & Sundays — please pick a weekend date.');
+      dateInput.value = '';
+    } else {
+      clearError(document.getElementById('step2Error'));
+    }
+    updateDtSummary();
+  });
+
   function updateDtSummary(){
     if (dateInput.value && selectedTime){
       const d = new Date(dateInput.value + 'T00:00:00');
@@ -640,7 +652,6 @@ footer nav a:hover{opacity:1}
     }
     updateSummary();
   }
-  dateInput.addEventListener('change', updateDtSummary);
   timeSlots.forEach(slot=>{
     slot.addEventListener('click', ()=>{
       timeSlots.forEach(s=>s.classList.remove('selected'));
@@ -740,16 +751,45 @@ footer nav a:hover{opacity:1}
   }
 
   // ---- Confirm booking ----
+  // Sends the booking details straight to Ty's inbox via FormSubmit (no backend needed)
   const confirmBtn = document.getElementById('confirmBtn');
+  const NOTIFY_EMAIL = 'tytookit1@gmail.com';
+
   confirmBtn.addEventListener('click', ()=>{
-    confirmBtn.innerHTML = 'Booked — redirecting…';
-    confirmBtn.style.background = 'var(--rust)';
-    confirmBtn.style.borderColor = 'var(--rust)';
-    confirmBtn.style.color = '#fff';
+    confirmBtn.innerHTML = 'Booking…';
     confirmBtn.disabled = true;
-    setTimeout(()=>{
-      window.location.href = 'thank-you.html';
-    }, 700);
+
+    const payload = {
+      _subject: `New booking request — ${document.getElementById('fname').value || 'Unnamed'}`,
+      Package: selectedPackage ? `${selectedPackage} (${selectedPrice})` : '—',
+      Date: dateInput.value
+        ? new Date(dateInput.value+'T00:00:00').toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'})
+        : '—',
+      Time: selectedTime || '—',
+      Location: document.getElementById('flocation').value || '—',
+      Name: document.getElementById('fname').value || '—',
+      Instagram: document.getElementById('finsta').value || '—',
+      Email: document.getElementById('femail').value || '—',
+      Message: document.getElementById('fmessage').value || '—',
+      _template: 'table',
+      _captcha: 'false'
+    };
+
+    fetch(`https://formsubmit.co/ajax/${NOTIFY_EMAIL}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .catch(()=>{ /* even if the network request fails, still move the client forward */ })
+    .finally(()=>{
+      confirmBtn.innerHTML = 'Booked — redirecting…';
+      confirmBtn.style.background = 'var(--rust)';
+      confirmBtn.style.borderColor = 'var(--rust)';
+      confirmBtn.style.color = '#fff';
+      setTimeout(()=>{
+        window.location.href = 'thank-you.html';
+      }, 700);
+    });
   });
 
   // clear invalid highlighting as the user fixes fields

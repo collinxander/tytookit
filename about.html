@@ -124,6 +124,21 @@ main{padding-top:4.6rem}
 .pillar h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.3rem;margin-bottom:.8rem;letter-spacing:-.01em}
 .pillar p{font-size:.88rem;line-height:1.7;color:var(--dim)}
 
+/* ---------- press / features ---------- */
+.press-h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.02em;margin-bottom:1.8rem}
+.press-h2 em{color:var(--rust);font-style:italic}
+.press-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem}
+.press-card{
+  display:flex;flex-direction:column;gap:.5rem;padding:1.8rem 1.9rem;
+  background:var(--mat);border:1px solid var(--line);text-decoration:none;color:var(--ink);
+  transition:border-color .3s,transform .3s,box-shadow .3s;
+}
+.press-card:hover{border-color:var(--rust);transform:translateY(-3px);box-shadow:0 14px 28px -16px rgba(28,26,21,.3)}
+.press-pub{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--rust)}
+.press-title{font-family:'Fraunces',serif;font-size:1.15rem;line-height:1.35;letter-spacing:-.01em}
+.press-link{font-size:.76rem;color:var(--dim);margin-top:.3rem;transition:color .25s}
+.press-card:hover .press-link{color:var(--rust)}
+
 /* ---------- story band ---------- */
 .story-band{position:relative;background:var(--ink);color:var(--mat);padding:8rem var(--pad);overflow:hidden;isolation:isolate}
 .story-band::before{content:'';position:absolute;left:50%;top:50%;width:900px;height:900px;transform:translate(-50%,-50%);z-index:-1;background:radial-gradient(circle,rgba(164,34,47,.28),transparent 62%)}
@@ -173,6 +188,7 @@ footer nav a:hover{opacity:1}
   .lead{grid-template-columns:1fr;padding:5rem var(--pad) 4rem}
   .pillars{grid-template-columns:1fr}
   .pillars-wrap{padding-bottom:4.5rem}
+  .press-grid{grid-template-columns:1fr}
   .story-band{padding:5rem var(--pad)}
   .about-cta{padding:5rem var(--pad)}
   header nav{gap:1rem;font-size:.7rem}
@@ -263,6 +279,26 @@ footer nav a:hover{opacity:1}
         <div class="pillar-num">03</div>
         <h3 class="serif">Education</h3>
         <p>Helping others discover their own creative spark — because the goal was never to be the only one holding the camera.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Press / Magazine Features -->
+  <div class="pillars-wrap">
+    <section class="press reveal">
+      <div class="info-label">As Seen In</div>
+      <h2 class="serif press-h2">Press &amp; <em>Features</em></h2>
+      <div class="press-grid">
+        <a class="press-card" href="https://voyagela.com/interview/conversations-with-tyann-reneau" target="_blank" rel="noopener">
+          <span class="press-pub">Voyage LA</span>
+          <span class="press-title">Conversations with Tyann Reneau</span>
+          <span class="press-link">Read the interview ↗</span>
+        </a>
+        <a class="press-card" href="https://shoutoutla.com/meet-tyann-reneau-film-photographer-educator/" target="_blank" rel="noopener">
+          <span class="press-pub">Shoutout LA</span>
+          <span class="press-title">Meet Tyann Reneau: Film Photographer &amp; Educator</span>
+          <span class="press-link">Read the interview ↗</span>
+        </a>
       </div>
     </section>
   </div>
