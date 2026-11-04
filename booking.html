@@ -751,16 +751,25 @@ footer nav a:hover{opacity:1}
   }
 
   // ---- Confirm booking ----
-  // Sends the booking details straight to Ty's inbox via FormSubmit (no backend needed)
+  // Sends the booking details straight to Ty's inbox via FormSubmit (no backend needed).
+  // NOTE: we submit a real hidden <form> (not fetch/ajax) because FormSubmit's AJAX
+  // endpoint silently fails until the destination email has been activated through a
+  // normal form POST — a real form submission is what actually triggers that flow.
   const confirmBtn = document.getElementById('confirmBtn');
   const NOTIFY_EMAIL = 'tytookit1@gmail.com';
 
-  confirmBtn.addEventListener('click', ()=>{
-    confirmBtn.innerHTML = 'Booking…';
-    confirmBtn.disabled = true;
+  function buildHiddenBookingForm(){
+    const form = document.createElement('form');
+    form.action = `https://formsubmit.co/${NOTIFY_EMAIL}`;
+    form.method = 'POST';
+    form.style.display = 'none';
 
-    const payload = {
+    const thankYouUrl = new URL('thank-you.html', window.location.href).href;
+    const fields = {
       _subject: `New booking request — ${document.getElementById('fname').value || 'Unnamed'}`,
+      _template: 'table',
+      _captcha: 'false',
+      _next: thankYouUrl,
       Package: selectedPackage ? `${selectedPackage} (${selectedPrice})` : '—',
       Date: dateInput.value
         ? new Date(dateInput.value+'T00:00:00').toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'})
@@ -770,26 +779,31 @@ footer nav a:hover{opacity:1}
       Name: document.getElementById('fname').value || '—',
       Instagram: document.getElementById('finsta').value || '—',
       Email: document.getElementById('femail').value || '—',
-      Message: document.getElementById('fmessage').value || '—',
-      _template: 'table',
-      _captcha: 'false'
+      Message: document.getElementById('fmessage').value || '—'
     };
 
-    fetch(`https://formsubmit.co/ajax/${NOTIFY_EMAIL}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    .catch(()=>{ /* even if the network request fails, still move the client forward */ })
-    .finally(()=>{
-      confirmBtn.innerHTML = 'Booked — redirecting…';
-      confirmBtn.style.background = 'var(--rust)';
-      confirmBtn.style.borderColor = 'var(--rust)';
-      confirmBtn.style.color = '#fff';
-      setTimeout(()=>{
-        window.location.href = 'thank-you.html';
-      }, 700);
+    Object.entries(fields).forEach(([key, value])=>{
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
     });
+
+    document.body.appendChild(form);
+    return form;
+  }
+
+  confirmBtn.addEventListener('click', ()=>{
+    confirmBtn.innerHTML = 'Booking…';
+    confirmBtn.disabled = true;
+
+    const form = buildHiddenBookingForm();
+    // real navigation — FormSubmit will redirect to thank-you.html (_next) once
+    // the email is sent. On the very first submission for a brand-new address,
+    // FormSubmit instead shows its own "confirm your email" page — Ty just needs
+    // to click the activation link once and everything works automatically after.
+    form.submit();
   });
 
   // clear invalid highlighting as the user fixes fields
